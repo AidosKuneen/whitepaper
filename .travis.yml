@@ -6,7 +6,7 @@ before_install:
 
 script:
 - mkdir _build
-- latexmk -interaction=nonstopmode -pdf -halt-on-error _build adk_whitepaper.tex
+- latexmk -interaction=nonstopmode -pdf -halt-on-error _build/adk_whitepaper.tex
 
 deploy:
   provider: releases
