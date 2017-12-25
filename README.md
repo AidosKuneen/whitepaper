@@ -19,6 +19,7 @@ This work is licensed under a [Creative Commons Attribution 4.0 International Li
 
 Improvements to the whitepaper and pull requests are encouraged.
 
-If you want to correct syntaxes and grammers, feel free to  [pull request](https://github.com/AidosKuneen/whitepaper/pulls).
+If you want to correct syntaxes and grammers, feel free to  edit adk_whitepaper.tex (text) and *.png (pictures)
+and do [pull request](https://github.com/AidosKuneen/whitepaper/pulls).
 
 If you have  ideas or improvements for ADK, please join our slack and let's discuss and improve your awesome ideas together!
