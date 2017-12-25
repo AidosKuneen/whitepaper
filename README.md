@@ -5,7 +5,7 @@
 # Aidos Kuneen Whitepaper
 
 ADK whitepaper is a draft and not released yet, and subject to change.
-Please remember that it could be drastically changed.
+It could be drastically changed.
 
 ## License
 
