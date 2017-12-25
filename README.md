@@ -15,6 +15,12 @@ This work is licensed under a [Creative Commons Attribution 4.0 International Li
 
 ![](https://i.creativecommons.org/l/by/4.0/88x31.png)
 
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE WHITEPAPER OR THE USE OR OTHER DEALINGS IN
+THE WHITEPAPER.
+
 ## Contribution
 
 Improvements to the whitepaper and pull requests are encouraged.
