@@ -5,15 +5,14 @@ before_install:
   texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended texlive-generic-recommended texlive-science 
 
 script:
-- mkdir _build
-- latexmk -interaction=nonstopmode -pdf -halt-on-error _build/adk_whitepaper.tex
+- latexmk -interaction=nonstopmode -pdf -halt-on-error adk_whitepaper.tex
 
 deploy:
   provider: releases
   skip_cleanup: true
   api_key:
     secure: qEjK4nkO17d0CbIPz0BPmW0K2LkS+W4njLH+rg3NTsmY/4qTTPIunx2NfKq05Fi4c6SM7yLWRprg25g8JwdcCbWW5H8BbVjnoG7vTLsUqe7SNWB0N2yumTY6h6S7wV02fb+iLfBYhJorR6YmQwNewOaM2/wSHbgyutEfjQKd9OtzYjo12i92nuv9n1LH0v1z9ZDi41j2Iaqc5lr/dc8+gtpJndfVjd/43F0FrfweN2fuR1f3agSShteqT0854s/oO7xyw8bE2piuitoxO/oDTYglp+G+jH7pT1rsYxhGZW3CIan0AcIMJ+tvuRsSoIYDf3YlUl7tIL7jHtrCOwMahUKA/i/MoWSDWAhCZGanKcia8oZT4cI21MsENmtcJoCIGUhC7tNmvDl4jOpTjuR8CLIv4v7E/rCeTD8IpPpLjaYehWh81wLB94af+dFvGQ6USQ3qDolZn1NPpGVO/jqyB1PRouEHMPc17+PATER4T+h4Hy75b2BXqMoY3CZEp8O5rDCxnmVApI4Hrg1chUvVrcrNVpZq2DPYLUkfJp/1j83lczaubWvAaQQgjKQHDDqIkFp3J24DsdW5idR4EBaUCx9NMGMTiHGMhOIffsszt7MXdxQiybG6inZpIq59y6lua8el1KfkjVQAA0rVotYSAKSs8NUYHbuCMInk2GeOQN0=
-  file: _build/adk_whitepaper.pdf
+  file: adk_whitepaper.pdf
   on:
     tags: true
     all_branches: true
