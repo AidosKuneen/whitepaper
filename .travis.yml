@@ -1,12 +1,12 @@
 sudo: required
 
 before_install:
-- sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-fonts-recommended
+- sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-fonts-recommended latexmk
   texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended texlive-generic-recommended texlive-science 
 
 script:
 - mkdir _build
-- pdflatex -interaction=nonstopmode -halt-on-error -output-directory _build adk_whitepaper.tex
+- latexmk -interaction=nonstopmode -pdf -halt-on-error -output-directory _build adk_whitepaper.tex
 
 deploy:
   provider: releases

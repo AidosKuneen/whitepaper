@@ -4,8 +4,10 @@
 
 # Aidos Kuneen Whitepaper
 
-ADK whitepaper is a draft and not released yet, and subject to change.
-It could be drastically changed.
+ADK whitepaper is a draft and is not released yet.
+It may be drastically changed.
+
+Please refer [here](https://github.com/AidosKuneen/whitepaper/releases) for the PDF.
 
 ## License
 
