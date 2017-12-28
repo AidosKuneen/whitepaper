@@ -52,12 +52,12 @@ top=20mm,
 		In this white paper we introduce a new cryptocurrency, \emph{Aidos Kuneen}. Aidos Kuneen has been developed to deliver a 
 		fast, anonymous, blockless, decentralized and scalable solution for post-quantum era transfers with zero fees. 
 		
-		Aidos Kuneen employs a mechanism known as \emph{iMesh}, within \emph{iMesh} all transactions are directly referenced by
+		Aidos Kuneen employs a mechanism known as \emph{iMesh}, within iMesh all transactions are directly referenced by
 		one another in order to form a \emph{Directed Acyclic Graph (DAG)} structure.
 		
 		The inclusion of `SPECTRE' allows full-nodes to determine which transactions are legitimate within the DAG structure and
-		to reject those that are not. In addition, SPECTRE provides resilience against attackers who control up to 50\% of the
-		network's computational power.
+		to reject those that are not. In addition, SPECTRE provides resilience against any attackers who maycontrol up to 50\% 
+		of the network's computational power.
 		
 		To ensure continued security in the post-quantum era, Aidos Kuneen utilises the hash-based signature `XMSS'. XMSS
 		provides for both a small signature and small public key size which in turn reduces network load.
@@ -99,34 +99,34 @@ This work is licensed under a Creative Commons Attribution 4.0 International Lic
 
 \section{Introduction}
 Bitcoin, the once obscure cryptocurrency introduced by Satoshi Nakamoto~\cite{btc} in 2008, has now begun to draw much wider attention 
-from both the general public and governments alike. Within the Bitcoin system, transactions are written into "blocks", these blocks are 
+from both the general public and governments alike. Within the Bitcoin network, transactions are written into "blocks", these blocks are 
 then crypographically validated by powerful computers known as "miners" using a Proof of Work (PoW) system. Once a block has been 
-validated it is then assembled into a continually extending chain known as the "block-chain". Miners are subsequently rewarded for 
+validated it is then appended to a continually extending chain known as the "block-chain". Miners are subsequently rewarded for 
 sucessfully validating a block by means of the transaction fees paid by senders who transact on the Bitcoin network. Currently, blocks 
 are added to the blockchain at a rate of approximately one every 10 minutes. The transactions consist of both input and output 
-addresses, with the inputs themselves being the outputs of previous transactions, this provides an auditable history all Bitcoin within 
-the network. In order to prove ownership, transactions are signed by the address owner with an Elliptic Curve Digital Signature 
-Algorithm (ECDSA).
+addresses, with the inputs themselves being the outputs of previous transactions, this provides an auditable history of all past Bitcoin 
+transactions within the network. In order to prove ownership, transactions are signed by the address owner with an Elliptic Curve 
+Digital Signature Algorithm (ECDSA).
 
 However, in recent years a number of problems have been identified with the Bitcoin implementation, including:
 \vspace{-0.5\baselineskip}
 \begin{itemize}
 	\setlength\itemsep{0em}
-	\item{Less scalability}\mbox{}\\ 
-	Within Bitcoin, the maximum block size is restricted and blocks are unable to store transactions once this limit is exceeded. 
-	This in turn leads to a scalability problem when many transactions are broadcast simultaneously with many of them being unable 
-	to be included in the current block.
-	\item{High fee}\mbox{}\\ 
-	Senders are required to pay a fee to miners in order to incentivise the miners to include their transaction in a block.
-	If Bitcoin continues to grow and the price of Bitcoin increases, the relative value of the fee will also increase. At some point
-	it will no longer make sense to send small transactions via the Bitcoin network and the fee would be greater than the value of 
-	the Bitcoin being transacted. This forces senders to use complicated schemes to send small value trasnactions (e.g. micropayment 
-	channels).
+	\item{Limited scalability}\mbox{}\\ 
+	Within the core Bitcoin code, the maximum block size is restricted and blocks are unable to store transactions once this limit 
+	is exceeded. This in turn leads to a scalability problem when many transactions are broadcast simultaneously with many of them 
+	being unable to be included in the current block.
+	\item{High fees}\mbox{}\\ 
+	Senders are required to pay a transaction fee in order to incentivise the miners to include their transaction in a block.
+	If Bitcoin usage continues to grow and the price of Bitcoin increases, the relative value of the fee will also increase. At some
+	point it will no longer make sense to send small transactions via the Bitcoin network and the fee would be greater than the 
+	value of the Bitcoin being transacted. This forces senders to use complicated schemes to send small value trasnactions (e.g. 
+	micropayment channels).
 	\item{Weak cryptographic strength for quantum computers}\mbox{}\\ 
 	As of 2017, the development of quantum computers is still in its infancy. However, experiments have already been carried out in 
 	which quantum computational operations were executed on a small number of quantum bits. Furthermore, Google has reported its 
 	intent to commercialize quantum technologies within the next five years~\cite{google}.At the same time, according to Shor's 
-	algorithm~\cite{shor}, all algorithms based on the elliptic-curve discrete logarithm problem,(including ECDSA as used in 
+	algorithm~\cite{shor}, all algorithms based on the elliptic-curve discrete logarithm problem (including ECDSA as used in 
 	Bitcoin), can be easily solved with a sufficiently powerful quantum computer. 
 	\item{Weak anonymity}\mbox{}\\ 
 	The auditable nature of Bitcoin means that in order to spend Bitcoin, the spending transaction must refer back to the founding
