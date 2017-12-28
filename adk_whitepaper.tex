@@ -35,7 +35,7 @@ top=20mm,
 
 
 
-\title{Aidos Kuneen \\ --- Blockless and Anonymous Cryptocurrency for Quantum Era ---}
+\title{Aidos Kuneen \\ --- A Blockless and Anonymous Cryptocurrency for the Post-Quantum Era ---}
 
 \author{
 	Aidos Developer \and Aidos Foundation
@@ -49,22 +49,31 @@ top=20mm,
 	\maketitle
 
 \begin{abstract}
-		In this white paper we introduce a new cryptocurrency \emph{Aidos Kuneen}. Aidos Kuneen focuses on 
-		blockless, privacy, decentralization and scalability for post quantum
-		era with no fee. 
+		In this white paper we introduce a new cryptocurrency, \emph{Aidos Kuneen}. Aidos Kuneen has been developed to deliver a 
+		fast, anonymous, blockless, decentralized and scalable solution for post-quantum era transfers with zero fees. 
 		
-		Aidos Kuneen employed \emph{iMesh}.
-		All transactions are directly referred by each others and forms  \emph{DAG (Directed Acyclic Graph)} structure.
-		`SPECTRE' makes full-nodes possible to determine which transactions are legit by the DAG structure.
-		SPECTRE is resilient to attackers  with up to 50\% of the computational power, not 33\%.
-		For quantum era we employ a hash-based signature `XMSS'.
-		Signature size and public key size of XMSS are relatively small.
-		Zero-knowledge proof for post-quantum `ZKBoo (ZKB++)` is utilized for 
-		anonymous transfers called \emph{AKShuffle}.
-		For IoTs we introduce cooperative Proof of Work called \emph{coPoW}. Each senders can do PoW together by coPoW.
-		Finally we simulate the number of leaves in iMesh. We determine the minimum number of reference transactions 
-		to converge the DAG.
-		This leads to faster confirmation time of transactions with minimum affects to the transaction size.
+		Aidos Kuneen employs a mechanism known as \emph{iMesh}, within \emph{iMesh} all transactions are directly referenced by
+		one another in order to form a \emph{Directed Acyclic Graph (DAG)} structure.
+		
+		The inclusion of `SPECTRE' allows full-nodes to determine which transactions are legitimate within the DAG structure and
+		to reject those that are not. In addition, SPECTRE provides resilience against attackers who control up to 50\% of the
+		network's computational power.
+		
+		To ensure continued security in the post-quantum era, Aidos Kuneen utilises the hash-based signature `XMSS'. XMSS
+		provides for both a small signature and small public key size which in turn reduces network load.
+	
+		In order to provide anonymity within the network, Aidos Kuneen employs \emph{AKShuffle}. AKShuffle 	
+		incorporates the post-quantum, Zero-knowledge proof `ZKBoo (ZKB++)`, this allows for truly anonymous transfers 
+		throughout the entire network.
+		
+		To allow Aidos Kuneen to service the expected growth of the future "IoT" sector we introduce a cooperative Proof of Work
+		mechanism known as \emph{coPoW}. coPoW allows a number of senders within the network to co-operatively perform the 
+		necessary Proof of Work in order to confirm the transactions on the network, thus reducing the physical processing 
+		requirements of any one sender.
+		
+		Finally, we provide a simulation of the number of leaves in iMesh and we further determine the minimum number of 
+		reference transactions required in order to converge the DAG and deliver faster confirmation times for transactions 
+		while having minimum effect on the transaction size.
 		
 		\end{abstract}
 
@@ -89,59 +98,61 @@ This work is licensed under a Creative Commons Attribution 4.0 International Lic
 \clearpage
 
 \section{Introduction}
-Bitcoin, which is invented by Satoshi Nakamoto~\cite{btc} in 2008, is widely used
-in all over the world now. In Bitcoin, transactions are stored
-into block-chains which are confirmed by miners  with Proof of Work (PoW).
-Then miners get transaction fee from senders of transactions.
-Block-chains are created periodically per around 10 minutes.
-A transaction consists with inputs and outputs with these addresses,
-and the inputs refer outputs of previous transactions to be spent.
-Transactions are signed in Elliptic Curve Digital Signature Algorithm (ECDSA) by the address owner 
-to reveal that the owner is legit.
+Bitcoin, the once obscure cryptocurrency introduced by Satoshi Nakamoto~\cite{btc} in 2008, has now begun to draw much wider attention 
+from both the general public and governments alike. Within the Bitcoin system, transactions are written into "blocks", these blocks are 
+then crypographically validated by powerful computers known as "miners" using a Proof of Work (PoW) system. Once a block has been 
+validated it is then assembled into a continually extending chain known as the "block-chain". Miners are subsequently rewarded for 
+sucessfully validating a block by means of the transaction fees paid by senders who transact on the Bitcoin network. Currently, blocks 
+are added to the blockchain at a rate of approximately one every 10 minutes. The transactions consist of both input and output 
+addresses, with the inputs themselves being the outputs of previous transactions, this provides an auditable history all Bitcoin within 
+the network. In order to prove ownership, transactions are signed by the address owner with an Elliptic Curve Digital Signature 
+Algorithm (ECDSA).
 
-However in recent years many problems are being exposed in Bitcoin including:
+However, in recent years a number of problems have been identified with the Bitcoin implementation, including:
 \vspace{-0.5\baselineskip}
 \begin{itemize}
 	\setlength\itemsep{0em}
 	\item{Less scalability}\mbox{}\\ 
-	In Bitcoin, the block size is limited and cannot store transactions over this limit. It causes a scalability
-	problem when many transactions are broadcasted simultaneously. This is because many of them are not stored in the current block.
+	Within Bitcoin, the maximum block size is restricted and blocks are unable to store transactions once this limit is exceeded. 
+	This in turn leads to a scalability problem when many transactions are broadcast simultaneously with many of them being unable 
+	to be included in the current block.
 	\item{High fee}\mbox{}\\ 
-	Sender must pay fee to miners as miners' incentive.
-	If more Bitcoin grows and the price of BTC is higher, the fee in Bitcoin will be relatively higher.
-	Due to the fee it doesn't make sense to send small value less than the fee, hence senders need to use complicated scheme to send small value
-(e.g. micropayment channel).
-	\item{Weak crypt strength for quantum computers}\mbox{}\\ 
-	As of 2017, the development of quantum computers is still in early stage.
-	However experiments have been carried out in which quantum computational operations were executed on a small number of quantum bits.
-	Further, Google reported to commercialize quantum technologies in five years~\cite{google}.
-	On the other hand, according to Shor's algorithm~\cite{shor}, all problems
-	based on elliptic-curve discrete logarithm problem, including ECDSA used in Bitcoin, 
-	can be easily solved on a sufficiently powerful quantum computer. 
+	Senders are required to pay a fee to miners in order to incentivise the miners to include their transaction in a block.
+	If Bitcoin continues to grow and the price of Bitcoin increases, the relative value of the fee will also increase. At some point
+	it will no longer make sense to send small transactions via the Bitcoin network and the fee would be greater than the value of 
+	the Bitcoin being transacted. This forces senders to use complicated schemes to send small value trasnactions (e.g. micropayment 
+	channels).
+	\item{Weak cryptographic strength for quantum computers}\mbox{}\\ 
+	As of 2017, the development of quantum computers is still in its infancy. However, experiments have already been carried out in 
+	which quantum computational operations were executed on a small number of quantum bits. Furthermore, Google has reported its 
+	intent to commercialize quantum technologies within the next five years~\cite{google}.At the same time, according to Shor's 
+	algorithm~\cite{shor}, all algorithms based on the elliptic-curve discrete logarithm problem,(including ECDSA as used in 
+	Bitcoin), can be easily solved with a sufficiently powerful quantum computer. 
 	\item{Weak anonymity}\mbox{}\\ 
-	To spend Bitcoin  spending transaction must refer founding transactions, and these transactions are open to public.
-	Hence anyone can see the flow of btc from address to address.
+	The auditable nature of Bitcoin means that in order to spend Bitcoin, the spending transaction must refer back to the founding
+	transactions that came before it, these founding transactions are open to the public. As such, anyone is free to track the flow
+	of btc from address to address.
 \end{itemize}
 
-We introduce new cryptocurrency \emph{Aidos Kuneen} to address these problems.
-Aidos Kuneen is based on DAG (Directed Acyclic Graph) technology called \emph{iMesh}.
-In iMesh, transactions are directly referred by other transactions and there is no blocks and block-chain.
-The confirmation of a transaction is determined by the number of other transactions which \emph{votes}
-to the transaction based on DAG structure. In iMesh, we can get the benefits of scalability and no fee.
+We introduce a new cryptocurrency, \emph{Aidos Kuneen} in order to address these problems.
+Aidos Kuneen is based on \emph{Directed Acyclic Graph (DAG)} technology known as \emph{iMesh}.
+In iMesh, transactions are directly referred to by other transactions and as such, there are no blocks and no block-chain.
+The confirmation of a transaction are determined by the number of other transactions which \emph{vote}
+for the transaction based on the DAG structure. In iMesh, we are able to achieve the benefits of scalability while removing the 
+requirements for mining incentives in the form of transaction fees.
 
 \vspace{-0.5\baselineskip}
 \begin{itemize}
 	\setlength\itemsep{0em}
 	\item{More scalable}\mbox{}\\ 
-In iMesh, one does relatively easier PoW for her transactions. 
-After she broadcasts a transaction, the transaction is stored into iMesh immediately.
-Hence there is no need to wait for one's own transaction to be stored in iMesh.
-And there is no limitation to be stored at a time.
-More the iMesh grows, more transactions involved. This means the confirmation of a transaction will be faster.
+In iMesh, one performs relatively easy PoW to confirm the transaction. After the transaction is broadcast to the network, the 
+transaction is stored into iMesh immediately. Hence there is no need to wait for one's own transaction to be confirmed. Additionally 
+there is no limitation to the size or number of transactions tha can be stored at atime. The more iMesh grows, the more transactions 
+become involved. This means that the confirmation time of any single transaction will reduce.
 
 \item{No fee}\mbox{}\\ 
-One doesn't need to pay fee, because there is no miner. No fee means one can spend very small value without
-any special techniques.
+One does not need to pay any fees, because there are no miners. No fee means one is free to transaction any amount, no matter how small 
+without requiring any special techniques.
 
 \item{Post quantum computers}\mbox{}\\ 
 In Aidos Kuneen we employ hash-based signature which has strong post-quantum security instead of ECDSA.
