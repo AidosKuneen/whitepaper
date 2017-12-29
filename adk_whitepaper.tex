@@ -40,7 +40,7 @@ top=20mm,
 \author{
 	Aidos Developer \and Aidos Foundation
 }
-\date{December XX, 2017 \\ Version 0.03.\\ THIS IS A DRAFT. THIS LINE MUST BE INCLUDED IN TRANSLATIONS.}
+\date{December XX, 2017 \\ Version 0.035.\\ THIS IS A DRAFT. THIS LINE MUST BE INCLUDED IN TRANSLATIONS.}
 
 
 \begin{document}
@@ -56,7 +56,7 @@ top=20mm,
 		one another in order to form a \emph{Directed Acyclic Graph (DAG)} structure.
 		
 		The inclusion of `SPECTRE' allows full-nodes to determine which transactions are legitimate within the DAG structure and
-		to reject those that are not. In addition, SPECTRE provides resilience against any attackers who maycontrol up to 50\% 
+		to reject those that are not. In addition, SPECTRE provides resilience against any attackers who may control up to 50\% 
 		of the network's computational power.
 		
 		To ensure continued security in the post-quantum era, Aidos Kuneen utilises the hash-based signature `XMSS'. XMSS
@@ -66,7 +66,7 @@ top=20mm,
 		incorporates the post-quantum, Zero-knowledge proof `ZKBoo (ZKB++)`, this allows for truly anonymous transfers 
 		throughout the entire network.
 		
-		To allow Aidos Kuneen to service the expected growth of the future "IoT" sector we introduce a cooperative Proof of Work
+		To allow Aidos Kuneen to service the expected growth of the future `IoT' sector we introduce a cooperative Proof of Work
 		mechanism known as \emph{coPoW}. coPoW allows a number of senders within the network to co-operatively perform the 
 		necessary Proof of Work in order to confirm the transactions on the network, thus reducing the physical processing 
 		requirements of any one sender.
@@ -77,7 +77,7 @@ top=20mm,
 		
 		\end{abstract}
 
-		\vspace{5cm}
+		\vspace{0.5cm}
 
 Copyright \copyright 2017-2018 by Aidos Developer and Aidos Foundation. \\
 
@@ -99,9 +99,9 @@ This work is licensed under a Creative Commons Attribution 4.0 International Lic
 
 \section{Introduction}
 Bitcoin, the once obscure cryptocurrency introduced by Satoshi Nakamoto~\cite{btc} in 2008, has now begun to draw much wider attention 
-from both the general public and governments alike. Within the Bitcoin network, transactions are written into "blocks", these blocks are 
-then crypographically validated by powerful computers known as "miners" using a Proof of Work (PoW) system. Once a block has been 
-validated it is then appended to a continually extending chain known as the "block-chain". Miners are subsequently rewarded for 
+from both the general public and governments alike. Within the Bitcoin network, transactions are written into `blocks', these blocks are 
+then crypographically validated by powerful computers known as `miners' using a Proof of Work (PoW) system. Once a block has been 
+validated it is then appended to a continually extending chain known as the `block-chain'. Miners are subsequently rewarded for 
 sucessfully validating a block by means of the transaction fees paid by senders who transact on the Bitcoin network. Currently, blocks 
 are added to the blockchain at a rate of approximately one every 10 minutes. The transactions consist of both input and output 
 addresses, with the inputs themselves being the outputs of previous transactions, this provides an auditable history of all past Bitcoin 
@@ -114,7 +114,7 @@ However, in recent years a number of problems have been identified with the Bitc
 	\setlength\itemsep{0em}
 	\item{Limited scalability}\mbox{}\\ 
 	Within the core Bitcoin code, the maximum block size is restricted and blocks are unable to store transactions once this limit 
-	is exceeded. This in turn leads to a scalability problem when many transactions are broadcast simultaneously with many of them 
+	is exceeded. This in turn leads to a scalability problem when many transactions are broadcasted simultaneously with many of them 
 	being unable to be included in the current block.
 	\item{High fees}\mbox{}\\ 
 	Senders are required to pay a transaction fee in order to incentivise the miners to include their transaction in a block.
@@ -145,9 +145,9 @@ requirements for mining incentives in the form of transaction fees.
 \begin{itemize}
 	\setlength\itemsep{0em}
 	\item{More scalable}\mbox{}\\ 
-In iMesh, one performs relatively easy PoW to confirm the transaction. After the transaction is broadcast to the network, the 
-transaction is stored into iMesh immediately. Hence there is no need to wait for one's own transaction to be confirmed. Additionally 
-there is no limitation to the size or number of transactions tha can be stored at atime. The more iMesh grows, the more transactions 
+In iMesh, one performs relatively easy PoW to confirm the transaction. After the transaction is broadcasted to the network, the 
+transaction is stored into iMesh immediately. Hence there is no need to wait for one's own transaction to be stored. Additionally 
+there is no limitation to the size or number of transactions tha can be stored at a time. The more iMesh grows, the more transactions 
 become involved. This means that the confirmation time of any single transaction will reduce.
 
 \item{No fee}\mbox{}\\ 
