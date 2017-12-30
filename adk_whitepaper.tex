@@ -162,7 +162,7 @@ conducive to usage by the non-technical, general public. For a cryptocurrency th
 completely unsuitable. As such, we focus our attention on the family of hash-based signature methods instead. Some hash based functions 
 such as'SPHINCS', provide us with the ability to reuse the same public key multiple times, which is a step in the right direction. 
 However, SPHINCS also suffers from the same large public key size (around 1 kilobyte) as the other methods, again making it unsuitable 
-for our application. Eventually, the 'eXtended Merkle Signature Scheme' (XMSS) was identified as being the ideal balance of human 
+for our application. Eventually, the `eXtended Merkle Signature Scheme' (XMSS) was identified as being the ideal balance of human 
 usability and small key size. XMSS allows us to repeatedly utilise the same public key a large number of times (1000 times or more) much 
 like SPHINCS. Unlike SPHINCS however, XMSS has a lightweight public key of only 32 bytes and a signature key size of approximately 3 
 kilobytes. XMSS also provides us with 128 bit encryption, which is sufficient to provide us with long-term post-quantum 
@@ -176,19 +176,26 @@ tokens freely without the need to reveal their secret key to either the receivin
 
 \section{Related Works}
 
-Monero\footnote{http://monero.org/} and Bytecoin\footnote{https://bytecoin.org/}
+{\bf Monero\footnote{http://monero.org/} and Bytecoin\footnote{https://bytecoin.org/}}
 
 To achieve anonymity, both Monero} and ByteCoin use `ring signature' methods as discussed in CryptoNote~\cite{ringsig}. Ring signature 
 methods rely on a signature which utlises a novel trapdoor function (e.g.\ public key encryption), unfortunately though, this feature is 
 not found in any of the avaialble hash-based signature methods. Zcoin\footnote{https://zcoin.io/} utilises a zero-knowledge, non-
-interactive proof called 'zk-SNARKs', however, zk-SNARKs is not quantum secure, owing to the fact that it uses pairing-based 
+interactive proof called `zk-SNARKs', however, zk-SNARKs is not quantum secure, owing to the fact that it uses pairing-based 
 cryptography\footnote{post-quantum Zcash (https://github.com/zcash/zcash/issues/805)}. 
+\\
 
-Another potential solution to provide anonymity, would be to use 'CoinJoin' or one of its variants (e.g. 'CoinShuffle'). However, 
+\noindent
+{\bf CoinJoin\footnote{https://en.bitcoin.it/wiki/CoinJoin}}
+
+
+Another potential solution to provide anonymity, would be to use `CoinJoin' or one of its variants (e.g. `CoinShuffle'). However, 
 CoinJoin requires the presence of active participants at the same time one intends to send tokens. This requirement could prove to be a 
 handicap in the early stages of adoption when there are few users for Aidos Kuneen. 
+\\
 
-IOTA\footnote{https://iota.org/} 
+\noindent
+{\bf IOTA\footnote{https://iota.org/}}
 
 IOTA is a DAG based, fee-less, IoT focussed cryptocurrency from which the Aidos Kuneen source code was originally based. 
 
