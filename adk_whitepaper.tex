@@ -207,8 +207,7 @@ efficient enough to meet our requirements, with some IoT oriented processors alr
 SHA-2 based hash processing, e.g.~ARM processors\footnote{https://static.docs.arm.com/ddi0501/f/DDI0501.pdf}. We also believe that at 
 least in the short to medium term, binary based systems will continue to remain the dominant form for consumer grade hardware.
 
-The IOTA team have stated that network corruption could arise if \( 2/3 \) of the total nodes in the network are controlled by bad 
-actors. If we follow the confirmation process as outlined in IOTA's whitepaper, which counts only the number of referring transactions 
+Regarding consensus algorithm, if we follow the confirmation process as outlined in IOTA's whitepaper, which counts only the number of referring transactions 
 (descendant transactions), we notice that if there are many leaves in the DAG (as will occur naturally), the number of 
 descendant transactions of any one transaction would be small. This means that attackers could potentially grow their malicious 
 transactions faster than the network. To combat this we introduce a confirmation process based on \emph{SPECTRE} as presented 
