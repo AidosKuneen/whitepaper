@@ -63,7 +63,7 @@ top=20mm,
 		provides for both a small signature and small public key size which in turn reduces network load.
 	
 		In order to provide anonymity within the network, Aidos Kuneen employs \emph{AKShuffle}. AKShuffle 	
-		incorporates the post-quantum, Zero-knowledge proof `ZKBoo (ZKB++)`, this allows for truly anonymous transfers 
+		incorporates the post-quantum, Zero-knowledge proof `ZKBoo (ZKB++)', this allows for truly anonymous transfers 
 		throughout the entire network.
 		
 		To allow Aidos Kuneen to service the expected future growth of the `IoT' sector we introduce an innovative new 
@@ -101,7 +101,7 @@ This work is licensed under a Creative Commons Attribution 4.0 International Lic
 Bitcoin, the once obscure cryptocurrency introduced by Satoshi Nakamoto~\cite{btc} in 2008, has now begun to draw much wider attention 
 from both the general public and governments alike. Within the Bitcoin network, transactions are written into `blocks', these blocks are 
 then cryptographically validated by powerful computers known as `miners' using a Proof of Work (PoW) system. Once a block has been 
-validated it is then appended to the end of a continually growing chain of blocks aptly named 'the block-chain'. Miners are subsequently
+validated it is then appended to the end of a continually growing chain of blocks aptly named `the block-chain'. Miners are subsequently
 rewarded for sucessfully validating a block by means of the transaction fees paid by senders who transact on the Bitcoin network.
 Currently, blocks are added to the blockchain at a rate of approximately one every 10 minutes. The transactions contained within the
 blocks consist of both input and output addresses, with the inputs themselves being the outputs of previous transactions - this provides
@@ -160,13 +160,11 @@ signature sizes. For example, the key sizes of Ring-LWE and Lattice based signat
 if we were to employ one of these methods for example, we would be forced to use long alphanumeric address strings which are not 
 conducive to usage by the non-technical, general public. For a cryptocurrency that is intended for widespread daily use this is 
 completely unsuitable. As such, we focus our attention on the family of hash-based signature methods instead. Some hash based functions 
-such as'SPHINCS', provide us with the ability to reuse the same public key multiple times, which is a step in the right direction. 
+such as `SPHINCS', provide us with the ability to reuse the same public key multiple times, which is a step in the right direction. 
 However, SPHINCS also suffers from the same large public key size (around 1 kilobyte) as the other methods, again making it unsuitable 
 for our application. Eventually, the `eXtended Merkle Signature Scheme' (XMSS) was identified as being the ideal balance of human 
-usability and small key size. XMSS allows us to repeatedly utilise the same public key a large number of times (1000 times or more) much 
-like SPHINCS. Unlike SPHINCS however, XMSS has a lightweight public key of only 32 bytes and a signature key size of approximately 3 
-kilobytes. XMSS also provides us with \( 2^{128} \) post-quantum security, which is sufficient to provide us with long-term post-quantum 
-security.~\cite{recom}.
+usability and small key size. XMSS allows us to repeatedly utilise the same public key a large number of times (1000 times or more). 
+However, unlike SPHINCS, XMSS has a lightweight public key of only 32 bytes and a signature key size of approximately 3 kilobytes. By utlising XMSS we also benefit from \( 2^{128} \) bit post-quantum security.~\cite{recom}.
 
 \item{Strong Anonymity}\mbox{}\\ 
 In order to achieve anonymity, we utilize the post-quantum, zero-knowledge, non-interactive(ZKNI) proof `ZKBoo' as presented 
@@ -188,16 +186,15 @@ cryptography\footnote{post-quantum Zcash (https://github.com/zcash/zcash/issues/
 \noindent
 {\bf CoinJoin\footnote{https://en.bitcoin.it/wiki/CoinJoin}}
 
-
-Another potential solution to provide anonymity, would be to use `CoinJoin' or one of its variants (e.g. `CoinShuffle'). However, 
+Another potential option for providing anonymity, would be to use `CoinJoin' or one of its variants (e.g. `CoinShuffle'). However, 
 CoinJoin requires the presence of active participants at the same time one intends to send tokens. This requirement could prove to be a 
-handicap in the early stages of adoption when there are few users for Aidos Kuneen. 
+handicap in the early stages of adoption when there are a low number of users of Aidos Kuneen. 
 \\
 
 \noindent
 {\bf IOTA\footnote{https://iota.org/}}
 
-IOTA is a DAG based, fee-less, IoT focussed cryptocurrency from which the Aidos Kuneen source code was originally based. 
+IOTA is a DAG based, fee-less, IoT focussed cryptocurrency from which the Aidos Kuneen source code was initially based. 
 
 The IOTA team has decided to pursue a ternary based signature rather than binary. This is owing to the fact that ternary based 
 systems are theoretically more computationally efficient than binary based systems. In Aidos Kuneen we have chosen to utilise 
@@ -223,60 +220,61 @@ within iMesh in order to ensure that the DAG converges.
 \section{Signature Scheme}
 \label{sec:sig}
 
-We use XMSS and its parameters described in RFC draft of IETF~\cite{ietf}.
-XMSS is based on Winternitz One Time Signature (WOTS+). 
-
-WOTS+ is a hash based signature scheme for one time use.
-And XMSS is a technique to make it possible to sign messages more than two times with one key.
+As previously mentioned, Aidos Kuneen employs XMSS as described in the RFC draft of IETF~\cite{ietf} as its signature algorithm. XMSS 
+itself is based on the earlier work of the Winternitz One Time Signature (WOTS+). WOTS+ is a hash based signature scheme designed for 
+single use only, XMSS builds upon this work and delivers a mechanism which makes it possible to sign multiple messages with a single 
+key.
 
 \subsection{WOTS+}
 
 \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{wots_pub.png}
-	  \caption{Generation of WOTS+ public key}
+	  \caption{Generation of the WOTS+ public key}
     \label{fig:wots_pub}
 	\end{center}
  \end{figure}
 
- Figure~\ref{fig:wots_pub} explains how to generate a public key.
+ Figure~\ref{fig:wots_pub} demonstrates how the public key is generated, the message signed and then the signature verified.
 
- To generate a public key, one gets 67 number of 32 bytes (256 bits) random binary data as his private key \( Priv_{j}, j=1 \ldots 67\).
- Then each \( Priv_{j} \) are hashed with SHA-256 for 15 times. While hashing, each  \( Priv_{j} \) is XORed with a value from PRF (Pseudo Random Function).
- This XOR operation is a trick to reduce the signature size with same security level.
- Finally he gets 67 number of 32 bytes binary data. This is his public key \( Pub_{j}, j=1 \ldots 67\).
+ In order to generate a public key, one initially receives a 67 character string consiting of 32 byte (256 bit) random binary data as a 
+ private key \( Priv_{j}, j=1 \ldots 67\). Then, each \( Priv_{j} \) is hashed with the SHA-256 algorithm for a total of 15 passes. 
+ While hashing, each \( Priv_{j} \) is XORed with a value from PRF (Pseudo Random Function). This XOR operation is a employed to reduce 
+ the signature size while maintaining the same security level. The output of these operations is a 67 character, 32 byte binary public 
+ key \( Pub_{j}, j=1 \ldots 67\).
 
  \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{wots_sign.png}
-	  \caption{Signing with WOTS+ private key}
+	  \caption{Signing with the WOTS+ private key}
     \label{fig:wots_sign}
 	\end{center}
  \end{figure}
 
- Figure~\ref{fig:wots_sign} shows  how to sign a message.
+ Figure~\ref{fig:wots_sign} illustrates how the message is signed.
 
- For signing one gets 256 bits hash of his message, and calculates a 12bits checksum from the hashed message.
- Then he gets 4 bits 67 binary data from the message.
- These values are shown as \(N_i,i=1 \ldots 67\) in the figure. Each 4 bits binary of \( Priv_j \) are hashed for
- \(N_i\)  times after XORed with same values he used for \( Pub_{j} \). 
- This result \( Sig_j, j=1 \ldots 67 \) are the signature.
- This checksum is used for preventing attacks from malicious messages. For example, if an attacker make a message  whose hash is 000 \ldots 0,
- i.e. \( N_i = 0, i=1 \ldots 64 \), then the signature completely would equal to his private key if there is no checksum. 
+ When signing, one receives a 256 bit hash of the original message, and a corresponding 12bit checksum from the hashed message.
+ Next, a 4 bit, 67 character binary string \( Priv_j \) is produced from the message. These values are shown as \(N_i,i=1 \ldots 67\) in 
+ Figure~\ref{fig:wots_sign}. Each of the 4 bit binary \( Priv_j \) values are then hashed for \(N_i\) times and XORed with the same 
+ values as used for \( Pub_{j} \). This result \( Sig_j, j=1 \ldots 67 \) then becomes the signature. The checksum is used to prevent 
+ attacks from malicious messages. For example, if there were no checksum and an attacker were to create a message whose hash were 000 
+ \ldots 0, i.e. \( N_i = 0, i=1 \ldots 64 \), then the signature would be equal to the private key and thus the private key would be 
+ exposed.
 
  \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{wots_veri.png}
-	  \caption{WOTS+ Verification }
+	  \caption{WOTS+ Verification}
     \label{fig:wots_veri}
 	\end{center}
  \end{figure}
 
- Figure~\ref{fig:wots_veri} shows  how to verify a signature.
+ Figure~\ref{fig:wots_veri} illustrates how the signature is verified.
 
- For verification a verifier calculates \(N_i, i=1 \ldots 67 \) in the same way as signing explained above.
- Then each \( Sig_j \) are hashed for \(15-N_i\)  times after XORed with same  values  used for \( Pub_{j} \).
- He gets \( Pub'_j , j=1 \ldots 67\). Then he checks if  \( Pub'_j,  j=1 \ldots 67 \) equals singer's public key \( Pub_j,  j=1 \ldots 67 \).
+ In order to verify a signature, a verifier first calculates \(N_i, i=1 \ldots 67 \) using the same procedure for signing as explained 
+ above. Next, each \( Sig_j \) is hashed \(15-N_i\) times and XORed with same values as were used to produce \( Pub_{j} \). The output f 
+ which yields \( Pub'_j , j=1 \ldots 67\). This is then checked to confirm that it equals the signer's public key \( Pub_j,  j=1 \ldots 
+ 67 \).
 
 \subsection{XMSS}
 
@@ -288,23 +286,21 @@ And XMSS is a technique to make it possible to sign messages more than two times
 	\end{center}
  \end{figure}
 
-Figure~\ref{fig:xmss_pub} shows how to generate a public key for XMSS. In short XMSS builds a tree called Merkle Tree
-to gather all public keys into one public key. Therefore one can use one public key for many times.
+Figure~\ref{fig:xmss_pub} demonstrates how the public key for XMSS is generated. In short, XMSS builds a tree known as a `Merkle Tree',
+to gather all public keys into one single key. This then allows one public key to be reused many times.
 
-At first one must make \( 2^h \)  numbers of WOTS+ private keys \( Priv_{ij}, i = 1 \ldots 2^h ,  j=1 \ldots 67\) and 
-corresponding WOTS+ public keys \( Pub_{ij}, i = 1 \ldots 2^h , j=1 \ldots 67 \)  (\(h\):height of Merkle Tree).
-We denote \( Pub_{ij} , j=1 \ldots 67 \) as  \( Pub_{i} \).
-Then  `ltree's are made
-from each public keys. One gets root hash of the ltree by hashing together with sibling WOTS+ public key
-( e.g.  \( Pub_{i} \) and  \( Pub_{i+1} \) ) repeatedly. This root hash is one of leaf
-in Merkle Tree.
-So he repeats it to make \( 2^h \) number of ltrees to fill all leaves of Merkle Tree.
-Finally, he gets the root hash of Merkle Tree by hashing leaves of the Merkle Tree (i.e. roots of ltrees).
-The root hash is the public key of XMSS.
+Initally, one must generate \( 2^h \) WOTS+ private keys \( Priv_{ij}, i = 1 \ldots 2^h ,  j=1 \ldots 67\) and the
+corresponding WOTS+ public keys \( Pub_{ij}, i = 1 \ldots 2^h , j=1 \ldots 67 \)  (\(h\):height of Merkle Tree). We denote \( Pub_{ij} , 
+j=1 \ldots 67 \) as  \( Pub_{i} \). Then, a series of `ltrees' are generated from each public key. One receives the root hash of the 
+ltree by hashing the ltree together with its sibling WOTS+ public key ( e.g.  \( Pub_{i} \) and  \( Pub_{i+1} \) ) repeatedly. This root 
+hash becomes one of the leaves in the Merkle Tree. This operation is then repeated \( 2^h \) times to produce a number of ltrees 
+equivalent to the number of private keys, these ltrees are then used to fill out the remaining leaves of the Merkle Tree. Finally, the 
+root hash of the Merkle Tree is caclulated by hashing together the leaves of the Merkle Tree (i.e. roots of ltrees). This root hash 
+becomes the XMSS public key..
 
-For signing, one selects one of unused private keys and corresponding public key.
-And he calculates WOTS+ signature. XMSS signature is the WOTS+ signature with `auth path'. Auth path is additional
-binary data to calculate root hash of Merkle Tree (i.e. XMSS public key).
+When signing, one simply selects one of the unused private keys and its corresponding public key and calculates the WOTS+ signature. The 
+XMSS signature is the WOTS+ signature with an `auth path'. The auth path is an additional piece of binary data used to calculate the 
+root hash of the Merkle Tree (i.e. the XMSS public key).
 
 \begin{figure}[ht]
 	\begin{center}
