@@ -305,39 +305,35 @@ root hash of the Merkle Tree (i.e. the XMSS public key).
 \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{auth_path.png}
-	  \caption{Auth path for XMSS}
+	  \caption{The auth path for XMSS}
     \label{fig:xmss_auth}
 	\end{center}
  \end{figure}
 
-In Figure\ref{fig:xmss_auth}, we assume 
-to select No.3 private key for signing. A Verifier can calculate No.3 node from signer's signature. The Verifier need No.4 to get No.12.
-, so auth path includes No4. In the same manner, to get No.31 root hash (i.e. XMSS public key), the signer includes  No4, No11 and No22 as auth path.
+With reference to Figure\ref{fig:xmss_auth}, we desire to select private key #3 for signing. A verifier can calculate node #3 from the 
+signer's signature. However, in order to determine node #12 the verifier will first need to determine node #4, this means that the auth 
+path must include node #4. In the same manner, in order to determine node #31's root hash (i.e. the XMSS public key), the signer also 
+requires nodes #11 and #22 to be included within the auth path. Thus, in order to perform the verification, the verifier must posess the 
+WOTS+ signature and the node values along the auth path (ie: the values ofns odes #4, #11 and #22). This will allow the verifier to 
+calculate the root hash of the Merkle Tree and determine if the root has is equal to the XMSS public key.
 
-For verification, a verifier must get WOTS+ signature and node values on auth path.
-She can calculate root hash of Merkle Tree, hence sh can  check if
-the root hash equals to the XMSS public key.
-
-Notice that
+Note that:
 \vspace{-0.5\baselineskip}
 \begin{itemize}
 	\setlength\itemsep{0em}
-	\item Signers need to record which private keys are used. We use Logarithmic Merkle Tree Traversal scheme 
-	mentioned in \cite{traverse} for efficient traversal and least storage cost.
-	\item Public key consists with \(32 \times 2 \) bytes (root hash of Merkle Tree and seed of PRF).
-	There is only one PRF seed because all pseudo random values can be generated from one PRF.
-	We include the seed as a part of a signature so that public key size becomes 32 bytes.
-	\item  Signature key size is about 3 KBytes.
-	\item Hash (SHA-256) has strong preimage resistance (i.e.\ attacker cannot guess the input from an output of hash),
-	 so it's hard to guess private keys from public keys even if they use good quantum computers.
+	\item Signers must record which private keys are used, in order to accomplish this we use the Logarithmic Merkle Tree Traversal 
+	scheme as presented in \cite{traverse} to provide efficient traversal and minimal storage cost. \item The public key consists of 
+	\(32 \times 2 \) bytes (the root hash of the Merkle Tree and the seed of PRF).	There is only one PRF seed, as all pseudo random 
+	values can be generated from a single PRF. We include the seed as a part of the signature such that the public key size becomes 
+	32 bytes. \item  The signature key size is approximately 3 kilobytes. \item The SHA-256 hash provides strong preimage resistance 
+	(i.e.\ an attacker is ubale to guess the input from the output of hash), thus it is difficult to guess the private key from the 
+	public key, even when using quantum based hardware.
 \end{itemize}
 		
-Additionally notice that we can use the same public key more time
-if \(h\) (height of Merkle Tree) is increased more, but it takes time to generate public keys on initial stage.
-Therefore in Aidos Kuneen there are 3 types of height.
+Additionally, note that we are able to reuse the same public key a number of times if \(h\) (the height of the Merkle Tree) is increased (although this requires more time to generate the public keys during the initial stage).
 
 \begin{table}[ht]
-	\caption{Merkle Tree height, estimated time for key generation per one CPU core, and users of XMSS}
+	\caption{Merkle Tree height, estimated time for key generation per CPU core, and intended users of XMSS}
     \label{tbl:height}
 	\begin{tabular}{rrrl} 
 		\toprule
@@ -351,23 +347,23 @@ Therefore in Aidos Kuneen there are 3 types of height.
 			\end{tabular}
   \end{table}
 
-Table~\ref{tbl:height} shows these 3 types. Those who wants to change addresses
-per one payment or don't send coins over 1000 times  
-could use height=10 without less impact of generating public keys. Big users, e.g.
-companies or merchants, who do payment many times with one public key, would use height=16 or 20.
+As Table~\ref{tbl:height} illustrates, there are 3 height levels for the Merkle Tree within Aidos Kuneen. Users who desire to change 
+addresses for each payment or who transact less than 1000 times with the same address are able to use height=10, reducing the impact of 
+continually generating public keys. Heavy users such as corporate entities or merchants, who transact more than 1000 times with one 
+public key, would use either height=16 or height=20.
 
-Note that we won't use XMSS \(^{MT}\) mentioned in~\cite{ietf}. 
-Although XMSS \(^{MT}\) make us possible not to generate all public keys at once,
-signature size is much bigger than XMSS (around 40 KBytes).
-
+Note: We have chosen not use XMSS \(^{MT}\), as detailed in~\cite{ietf}. Although XMSS \(^{MT}\) means we do not need to generate all 
+the public keys simultaneously, the signature size is much larger than that of XMSS, weighing in at around 40 kilobytes.
 
 \section{iMesh}
 \label{sec:imesh}
 
 \subsection{SPECTRE}
-When a sender sends a transaction \(T\),  he directly includes some previous transactions \(T\) which were sent before by others. 
-Figure~\ref{fig:imesh} shows the DAG structure of these transactions we call \emph{iMesh}. When sending
-the sender selects some leaves in DAG (i.e.\ transactions which are not referred by any transactions) he saw in iMesh.
+When a sender sends a transaction \(T\), he includes some of the transactions \(T\) previously sent by others. 
+Figure~\ref{fig:imesh} illustrates the DAG structure of these transactions that we refer to as \emph{iMesh}. When sending,
+the sender selects some of the leaves in iMesh (i.e.\ transactions which are not currently referred to by any other transactions) and 
+determines whether or not the parent transactions of these leaves are valid. After determining the parent transactions are valid the 
+leaves are included in the senders transaction.
 
 \begin{figure}[ht]
 	\begin{center}
@@ -377,37 +373,34 @@ the sender selects some leaves in DAG (i.e.\ transactions which are not referred
 	\end{center}
  \end{figure}
 
-Although blocks in Bitcoin refers one previous block,
-DAG can refer many transactions in one transaction.
- Blocks grow one block per one time, but many transactions in DAG can grow simultaneously.
-So, DAG can be more scalable than block-chain.
+Unlike block-chain based networks such as Bitcoin, where a block refers only to the preceding block, a single transaction in a DAG 
+refers to many other transactions within the DAG. With block-chain tecnhnology, the chain grows in a linear sequence (ie: one block at a 
+time), whereas within a DAG the interlinked nature of the transactions allow it to grow simultaneously in all directions, thus leading 
+to superior scalability compared to block-chain based systems.
 
-However there is a side-effect when there are conflict transactions.
-For example, assume address Alice has 10 unit of coins.
-She sends 10 units to Bob in transaction T1, and Alice sends 10 units to Cathy
-in another transaction T2. As a result these 2 transactions are conflicting.
-In block-chain based cryptocurrency, once one of them is stored in one block, another will be never stored,
-i.e. if T1 is once confirmed,  T2 will be never validated.
-On the other hand  when there are conflicting transactions (colored with red in Figure\ref{fig:imesh}) in iMesh,
-it is hard to know which is valid. To solve this problem, we use voting mechanism  mentioned in `SPECTRE'~\cite{spectre}.
-Note that any attackers cannot try anything but `double spending' attack mentioned above,
-because nobody can create coins \emph{out of thin air}.
+However, this interlinked nature is not without its drawbacks when it comes to conflicting transactions. For example, assume Alice's 
+address holds a total of 10 tokens. She sends 10 tokens to Bob in transaction T1, and then without thinking she sends 10 tokens to Cathy 
+in another transaction T2. Alice has inadvertently attempted to spend the same tokens twice (this is known as a `double spend')
+and as a result these 2 transactions are now in direct conflict. In a block-chain based system, once one of the conflicting transactions 
+has been written into a block, the other will be never stored, (i.e. if T1 receives at least one confirmation before T2, then T2 will be 
+rendered invalid).On the other hand when there are conflicting transactions (highlighted in red in Figure\ref{fig:imesh}) within iMesh, 
+it is difficult to determine which is valid. To solve this problem, Aidos Kuneen adopts the voting mechanism as presented in 
+`SPECTRE'~\cite{spectre}.
 
 \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{spectre.png}
-	  \caption{An example of the voting procedure  on  a  simple  DAG.}
+	  \caption{An example of the voting procedure within a simplified DAG structure.}
     \label{fig:spectre}
 	\end{center}
  \end{figure}
 
- In SPECTRE one counts voters for conflicting transactions.
- Figure~\ref{fig:spectre} shows the voting procedure. 
- 
- In this figure transaction x and y are conflicting.
- Transaction x and transactions 6--8 vote transaction x, as they only see x in their past, and not y. Similarly, transaction y and transactions 9--11 vote y.
- Transaction 12 votes according to a majority of votes of transactions except transactions 10,11,12. Any transaction from 1--5 votes x,
- because it sees more x voters in its future than y voters. As a result, x voters are more than y voters, x is regarded as legit. 
+ In SPECTRE, one counts the number of voters for each of the conflicting transactions. Figure~\ref{fig:spectre} shows the voting 
+ procedure. As we can see, transactions X and Y are in conflict. Transaction X and transactions 6--8 vote for transaction X, as they 
+ only see X in their past, and not Y. Similarly, transaction Y and transactions 9--11 vote for transaction Y. Transaction 12 votes 
+ according to the majority of the votes from the other transactions (except for transactions 10,11 and 12). All transactions from 1--5 
+ vote for transaction X as they see more X voters than Y voters. As a result, the total number of X voters is greater than Y voters, 
+ therefore X is accepted as the legitimate transaction and Y is rejected. 
 
  Intuitively,  the procedure of voting and its reasons is as follows.
 
