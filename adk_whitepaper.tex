@@ -402,70 +402,81 @@ it is difficult to determine which is valid. To solve this problem, Aidos Kuneen
  vote for transaction X as they see more X voters than Y voters. As a result, the total number of X voters is greater than Y voters, 
  therefore X is accepted as the legitimate transaction and Y is rejected. 
 
- Intuitively,  the procedure of voting and its reasons is as follows.
+ The rules regarding the SPECTRE voting procedure are as follows:
 
  \vspace{-0.5\baselineskip}
  \begin{enumerate}
 	 \setlength\itemsep{0em}
-\item   Transactions which only have the transaction x as parent vote transaction x. (transaction 6--8 and 9--11) \\
-Honest transactions gain votes over withheld transactions in secret, as honest nodes keep adding new transactions to the honest transaction.
- \item  Transactions which have both x and y as parent vote to one of them which has majority of voters. (transaction 12)\\
- It guarantees majority amplification, as these transactions add votes
- that comply with and enhance previous decisions. 
- \item   Transactions which doesn't have both transactions x and y as parent vote to one of them which has majority of voters. (transaction 1--5)\\
- This rule allows amplifications in parents of x (transaction 1--4) to vote in its favour against y.
- This is needed to counter a pre-mining attack scheme, i.e. the attacker builds blocks and withholding them from the network.
- This is because honest transactions tends to have more ancestor transactions, and the honest transaction
- should get more votes by procedure 1 and 2.
+\item Transactions which only have transaction X as the parent can only vote for transaction X. (transactions 6--8 and 9--11) \\
+Honest transactions gain votes over transactions that have been secrtely witheld by dishonest parties, as honest nodes continue to add 
+new transactions that subsequently vote for the honest transaction.
+ \item Transactions which have both X and Y as a parent (transaction 12)\\ vote for which ever one has the majority of voters.
+This system guarantees majority amplification, as these transactions add votes that reinforce previous decisions. 
+ \item  Transactions which do not have both transactions X and Y as parents vote for which ever has the majority of voters (transaction 
+ 1--5)\\.
+ This rule allows amplification of the votes of parents of transaction X (transaction 1--4). This is necessary to counter a `pre-mining 
+ attack' scheme, i.e. the attacker builds blocks and withholds them from the network. Due to the fact that honest transactions tend to 
+ have a greater number of ancestor transactions, an honest transaction should receive more votes by means of procedure 1 and 2.
  \end{enumerate}
 
-Note that SPECTRE is resilient to attackers with up to 50\% of the computational power, and not 33\%, as is proved in~\cite{spectre}.
+Note: SPECTRE is resilient against attackers with up to 50\% of the network's total computational power, and not the traditional 33\%, 
+as demonstrated in~\cite{spectre}.
 
- Also in iMesh receivers must wait for their transaction to be confirmed by sufficient number of transactions like Bitcoin.
-~\cite{spectre}  also mentions about how long receivers should wait. Let's assume that we wait 5 confirmations for Bitcoin 
-and attackers in Bitcoin have 30\% of whole hash power. The possibility of success in attack is 17.8\%\cite{btc}. In SPECTRE voting scheme
-one transaction needs around 130 referred transactions to get 17.8\%. 
-If arrival of transactions becomes faster in iMesh , the waiting time would be shorter. But she would have to wait for a long time
-in early days of iMesh. Additionally when an attacker has more than half of the whole hash power, the iMesh could be attacked
-and malicious transactions could be illegally accepted.
-Therefore we introduce a mechanism called `Coordinator` to confirm transactions deterministic ally for early days of iMesh.
-Another thing we must note that if there are many leaves in iMesh, the possibility which one leaf is referred by one new transaction
-would be less. So we need to consider how many number of transactions should be referred from one transaction. We will discuss this problem
-in Section~\ref{sec:leaves}.
+ Additionally, in iMesh receivers must also wait for their transaction to be confirmed by a sufficient number of other transactions 
+ (much like waiting for a number of "confirms" Bitcoin) prior to spending. ~\cite{spectre} provides guidance on how long receivers 
+ should wait before trusting a new transaction. For comparison, let's assume that we will wait for 5 confirmations before accepting a 
+ payment on the Bitcoin network. Let's also assumethat an attacker has managed to gain control of 30\% of the total hash power in the 
+ Bitcoin network. The possibility of success of such an attack is 17.8\%\cite{btc}. Similarly, in iMesh with the SPECTRE voting scheme 
+ employed,once a transaction (tx A) has received approximately 130 referrals the probability of a fraudulent (intentionally conflicting) 
+ transaction (tx B) being accepted as legitimate in place of tx A has reduced to 17.8\%. As the iMesh network grows and the frequency of 
+ transactions increases, the waiting time required for a transaction to be verified as legitimate by the network will decrease (ie: the 
+ larger the network grows the faster it becomes). Conversely, when the network is small the waiting times are very long, however, the 
+ network hash power is also likely to be quite small and this is an opportunity that an attacker may attempt to exploit. As the network 
+ hash power is low, it is likely that an attacker with access to enough computational resources would be able to control 51% of the 
+ network hash power and thus gain the ability to have his own fraudulent transactions accepted. Note: as the network grows, the hashing 
+ power required to achieve 51% control also grows thus making it significantly more difficult for an attacker to achieve this level of 
+ control.
+ 
+In order to prevent this potential attack vector, we introduce a mechanism known as the `The Arbiter' to deterministically confirm transactions while iMesh is still in its infancy.
 
-In voting scheme, senders have incentive to refer as many as transactions they can.
-It's because the confirmation speed of senders' transaction also depends on the number of referring transactions.
-So if a sender refers just few transactions, the receiver could reject the payment because it would take time to receive coins.
+In the voting scheme, senders have an incentive to refer to as many transactions as they can due to the confirmation speed of the 
+sender's transaction being directly related to the number of referring transactions. If a sender were to refer to only a small number of 
+transactions, the receiver could potentially reject the payment as it would take a significant amount of time for the transaction to be 
+validated and for the receiver to receive the tokens.
 
-\subsection{Coordinator}
+It must also be noted that if there are many leaves within iMesh, the possibility in which any one leaf is referred to by a new 
+transaction would reduce. To combat this we need to carefully consider how many transactions should be referred to by any one single 
+transaction. We will explore this issue in greater detail within Section~\ref{sec:leaves}.
 
-As mentioned previous section, we must assume that attackers could get half of PoW power in early days of
-iMesh. This would make attackers to have big incentive to attack iMesh. Having half of PoW means that
-we could not use automatic consensus. Thus we introduce `Coordinator' which 
-confirms transactions by centralized way.
+\subsection{The Arbiter}
 
-Each nodes define one trusted address (Coordinator) and  transactions which the trusted transaction refers are regarded as `confirmed'.
-Rules to decide valid transactions between conflicting transactions are as follows.
+As mentioned in the previous section, we must assume that during iMesh's infancy period an attacker with access to sufficient resources 
+could realistically command the majority of the total network hash power. It is for this reason that we are therfore unable to trust an 
+automatic consensus mechanism during the early stages of network growth. Thus we must introduce `The Arbiter', a temporary system which 
+acts as a trusted, centralised mechanism to validate transactions until such time as the automatic consensus mechanism can take over.
+
+With this system in place, each node defines one explicitly trusted address (The Arbiter), transactions which The Arbiter deems to be 
+legitimate are subsequently regarded as `trusted transactions' by the nodes and any conflicting transaction are discarded. The rules 
+employed by The Arbiter in order to determine the vailidity of conflicting transactions are as follows:
 
 \begin{itemize}
-	\item  The transaction which is confirmed earlier is valid, and others are invalid.
-	\item If  conflicting transactions are confirmed at same time,
-	the transaction which has older time stamp is valid.
-	If both of them has same time stamp, the transaction which has smaller hash
-	is valid.
+	\item The transaction which is confirmed earlier is deemed to be valid, and all others are considered to be invalid.
+	\item If conflicting transactions are confirmed at the same time, the transaction which posesses the older time stamp is deemed 
+	to be valid.
+	\item If both transactions posess the same time stamp, the transaction which has the smaller hash
+	is deemed to be valid.
 \end{itemize}
 
-Trusted transactions must refer previous one to define `time stamp' in iMesh.
-Each full nodes check the rule for each trusted transaction.
-Coordinator is regarded as invalid if it doesn't refer previous transaction or refers older one.
-It makes the Coordinator not to be able to try double spending.
+Within iMesh, a trusted transaction must refer back to a previous transaction to allow its `time stamp' to be properly defined.
+In order to ensure The Arbiter itself does not become corrupted, each full node verifies The Arbiter's ruleset for each trusted 
+transaction. The Arbiter's decision is regarded as invalid if any one of these rules is found to have been breached.
 
-Some people might say that the Coordinator is a centralized scheme and should not exist
-in cryptocurrency. The Coordinator
-is needed due to no fee and there is less incentive to contribute iMesh
-in early days of iMesh. We strongly believe that no fee is a big advantage
-for users. And don't forget that the Coordinator is not a main stream 
-and it could be removed after the users  increase as mentioned before.
+While it is acknowledged that the presence of a centralised system such as The Arbiter does directly contradict Aidos Kuneen's ultimate 
+vision of a completely decentralised cryptocurrency. The Arbiter, for the reasons outlined previously, is accepted to be a
+"necessary evil" until such time as the network has matured to the point where it is capable of resiting attack on its own. 
+Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less XX to its user base, the presence of The Arbiter 
+allows the realisation of this vision from day one, with no need to resort to alternative, "incentivised" mechanisms for early network 
+protection.
 
 \section{Proof of Work}
 \label{sec:pow}
