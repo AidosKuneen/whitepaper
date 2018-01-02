@@ -310,11 +310,11 @@ root hash of the Merkle Tree (i.e. the XMSS public key).
 	\end{center}
  \end{figure}
 
-With reference to Figure\ref{fig:xmss_auth}, we desire to select private key #3 for signing. A verifier can calculate node #3 from the 
-signer's signature. However, in order to determine node #12 the verifier will first need to determine node #4, this means that the auth 
-path must include node #4. In the same manner, in order to determine node #31's root hash (i.e. the XMSS public key), the signer also 
-requires nodes #11 and #22 to be included within the auth path. Thus, in order to perform the verification, the verifier must posess the 
-WOTS+ signature and the node values along the auth path (ie: the values ofns odes #4, #11 and #22). This will allow the verifier to 
+With reference to Figure~\ref{fig:xmss_auth}, we desire to select private key \#3 for signing. A verifier can calculate node \#3 from the 
+signer's signature. However, in order to determine node \#12 the verifier will first need to determine node \#4, this means that the auth 
+path must include node \#4. In the same manner, in order to determine node \#31's root hash (i.e. the XMSS public key), the signer also 
+requires nodes \#11 and \#22 to be included within the auth path. Thus, in order to perform the verification, the verifier must posess the 
+WOTS+ signature and the node values along the auth path (ie: the values ofns odes \#4, \#11 and \#22). This will allow the verifier to 
 calculate the root hash of the Merkle Tree and determine if the root has is equal to the XMSS public key.
 
 Note that:
