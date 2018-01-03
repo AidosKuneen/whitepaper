@@ -40,7 +40,7 @@ top=20mm,
 \author{
 	Aidos Developer \and Aidos Foundation
 }
-\date{December XX, 2017 \\ Version 0.035.\\ THIS IS A DRAFT. THIS LINE MUST BE INCLUDED IN TRANSLATIONS.}
+\date{January, 2018 \\ Version 0.035.\\ THIS IS A DRAFT. THIS LINE MUST BE INCLUDED IN TRANSLATIONS.}
 
 
 \begin{document}
@@ -423,7 +423,7 @@ Note: SPECTRE is resilient against attackers with up to 50\% of the network's to
 as demonstrated in~\cite{spectre}.
 
  Additionally, in iMesh receivers must also wait for their transaction to be confirmed by a sufficient number of other transactions 
- (much like waiting for a number of "confirms" Bitcoin) prior to spending. ~\cite{spectre} provides guidance on how long receivers 
+ (much like waiting for a number of `confirms' Bitcoin) prior to spending. ~\cite{spectre} provides guidance on how long receivers 
  should wait before trusting a new transaction. For comparison, let's assume that we will wait for 5 confirmations before accepting a 
  payment on the Bitcoin network. Let's also assumethat an attacker has managed to gain control of 30\% of the total hash power in the 
  Bitcoin network. The possibility of success of such an attack is 17.8\%\cite{btc}. Similarly, in iMesh with the SPECTRE voting scheme 
@@ -473,7 +473,7 @@ transaction. The Arbiter's decision is regarded as invalid if any one of these r
 
 While it is acknowledged that the presence of a centralised system such as The Arbiter does directly contradict Aidos Kuneen's ultimate 
 vision of a completely decentralised cryptocurrency. The Arbiter, for the reasons outlined previously, is accepted to be a
-"necessary evil" until such time as the network has matured to the point where it is capable of resiting attack on its own. 
+`necessary evil' until such time as the network has matured to the point where it is capable of resiting attack on its own. 
 Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less XX to its user base, the presence of The Arbiter 
 allows the realisation of this vision from day one, with no need to resort to alternative, "incentivised" mechanisms for early network 
 protection.
@@ -490,7 +490,41 @@ PoW in Aidos Kuneen is for protecting DDoS and double spending attack to iMesh.
 Additionally PoW can disperse the distribution
 of transactions occurrence. So we could re-target the difficulty of PoW when iMesh will be bigger.
 
-We use Cuckoo Cycle mentioned in \cite{cuckoo} as PoW. The reason is as follows.
+We use Cuckoo Cycle mentioned in \cite{cuckoo} as PoW. 
+Cuckoo Cycle is based on 
+inserting items in a Cuckoo hashtable and it naturally leads to cycle formation in random bipartite graphs.
+A Cuckoo hashtable consists of two
+same-sized tables each with its own hash function mapping a key to a table location, providing two
+possible locations for each key. Upon insertion of a new key, if both locations are already occupied by
+keys, then one is kicked out and inserted in its alternate location, possibly displacing yet another key,
+repeating the process until either a vacant location is found, or some maximum number of iterations
+is reached.The latter is bound to happen once cycles have formed in the Cuckoo graph.
+This is a bipartite graph with a node for each location and an edge for every inserted key, connecting the two
+locations it can reside at.
+
+\begin{figure}[ht]
+	\begin{center}
+	\includegraphics[width=80mm]{cuckoo.png}
+	  \caption{Cuckoo Cycle}
+    \label{fig:cuckoo}
+	\end{center}
+ \end{figure}
+
+ The left diagram in Figure \ref{fig:cuckoo} shows the directed cuckoo graph on \( N = 8 + 8 \) nodes
+ after adding edges (2, 15), (4, 9), (8, 5), (4, 15), (12, 11), (10, 5) and (4, 13) .
+ In order to add the 8th edge (10, 11), we follow the paths \( 10 \rightarrow 5 \rightarrow 8 \) and
+ \( 11 \rightarrow 12 \) to find different roots 8 and 12. 
+ Since the latter path is shorter, we reverse it to \( 12 \rightarrow 11\) so
+ we can add the new edge as (\( 11 \rightarrow 10\) ), resulting in the middle diagram. In order to add to 9th edge
+ (10, 13) we now find the path from 10 to be the shorter one, so we reverse that and add the new edge
+ as (\( 10 \rightarrow 13\)), resulting in the right diagram. When adding the 10th edge (8, 9), we find the paths
+ \( 8 \rightarrow 5 \rightarrow 10 \rightarrow 13 \rightarrow 4  \rightarrow 15 \rightarrow 2 \) and
+ \( 9 \rightarrow 4 \rightarrow 15 \rightarrow 2 \) 
+ with equal roots. In this case, we can compute
+ the length of the resulting cycle as 1 plus the sum of the path-lengths to the node where the two paths
+ join. In the diagram, the paths join at node 4, and the cycle length is computed as 1 + 4 + 1 = 6.
+
+The reason we choise Cuckoo Cycle as PoW is as follows.
 There would be much more transactions than blocks in Bitcoin, and full-nodes
 must check PoW for all transactions. Therefor full-nodes would verify
 PoW function much more time than Bitcoin. So we should not use heavy-weight PoW function (e.g.\ cryptonight or scrypt).
