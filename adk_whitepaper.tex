@@ -479,65 +479,63 @@ allows the realisation of this vision from day one, with no need to resort to al
 protection.
 
 \section{Proof of Work}
-\label{sec:pow}
+\label{sec:PoW}
 
-When sending transactions, senders must do Proof of Work (PoW) as miners do in Bitcoin.
-Each transactions have nonce field
-and the hash of the transaction must be under certain value.  The time of PoW would be targeted
-around 5--10 minutes in average.
-PoW in Aidos Kuneen is for protecting DDoS and double spending attack to iMesh. 
+When sending a transaction, senders must first perform `Proof of Work' (PoW), similar to that which is performed by miners in the 
+Bitcoin network). The mandatory performance of PoW prior to sending a transaction is necessary in order to protect iMesh from DDoS 
+attacks via spam transactions and double spend attacks (as previously discussed). In addition, PoW is used to distribute the 
+computational workload of validating transactions between all participants in the network. This ensures that the network does not 
+become constrained by the limitations in processing capabilities of a handful of "masternodes", but instead remains completely free to 
+scale as required. During the PoW operation each transaction is assigned a 20 character, 32-bit integer field known as a `nonce'. 
+The value of this nonce is set such that the hash of the block will contain a leading run of zeros and form a 20 character cycle known 
+as a `Cuckoo Cycle'.The leading run of zeroes determines the time required for the PoW operation and has been chosen to produce an 
+average PoW time of 5-10 minutes.
 
-Additionally PoW can disperse the distribution
-of transactions occurrence. So we could re-target the difficulty of PoW when iMesh will be bigger.
-
-We use Cuckoo Cycle mentioned in \cite{cuckoo} as PoW. 
-Cuckoo Cycle is based on 
-inserting items in a Cuckoo hashtable and it naturally leads to cycle formation in random bipartite graphs.
-A Cuckoo hashtable consists of two
-same-sized tables each with its own hash function mapping a key to a table location, providing two
-possible locations for each key. Upon insertion of a new key, if both locations are already occupied by
-keys, then one is kicked out and inserted in its alternate location, possibly displacing yet another key,
-repeating the process until either a vacant location is found, or some maximum number of iterations
-is reached.The latter is bound to happen once cycles have formed in the Cuckoo graph.
-This is a bipartite graph with a node for each location and an edge for every inserted key, connecting the two
-locations it can reside at.
+For PoW operations, Aidos Kuneen implements a Cuckoo Cycle as discussed in \cite{cuckoo}. The Cuckoo Cycle arises by the insertion of
+keys into a `Cuckoo Hashtable' which naturally leads to the cyclic formation of random bipartite graphs. A Cuckoo Hashtable consists of 
+two identical tables, each with a unique hash function which maps a key to a table location (this provides two possible locations for 
+each key). Upon arrival of a new key, its table location is first determined. If both possible locations are currently occupied by 
+existing keys, then one is extracted and inserted into its alternate location (potentially displacing yet another key). This process is 
+subsequently repeated until either a vacant location is identified, or a predetermined number of iterations is reached. This process 
+leads to the formation of cycles in what is referred to as a `Cuckoo Graph'. The Cuckoo Graph is a bipartite graph with a node at each 
+location, and an edge for every inserted key, connecting the two locations at which the key can reside.
 
 \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{cuckoo.png}
-	  \caption{Cuckoo Cycle}
+	  \caption{The Cuckoo Cycle}
     \label{fig:cuckoo}
 	\end{center}
  \end{figure}
 
- The left diagram in Figure \ref{fig:cuckoo} shows the directed cuckoo graph on \( N = 8 + 8 \) nodes
- after adding edges (2, 15), (4, 9), (8, 5), (4, 15), (12, 11), (10, 5) and (4, 13) .
- In order to add the 8th edge (10, 11), we follow the paths \( 10 \rightarrow 5 \rightarrow 8 \) and
- \( 11 \rightarrow 12 \) to find different roots 8 and 12. 
- Since the latter path is shorter, we reverse it to \( 12 \rightarrow 11\) so
- we can add the new edge as (\( 11 \rightarrow 10\) ), resulting in the middle diagram. In order to add to 9th edge
- (10, 13) we now find the path from 10 to be the shorter one, so we reverse that and add the new edge
- as (\( 10 \rightarrow 13\)), resulting in the right diagram. When adding the 10th edge (8, 9), we find the paths
- \( 8 \rightarrow 5 \rightarrow 10 \rightarrow 13 \rightarrow 4  \rightarrow 15 \rightarrow 2 \) and
- \( 9 \rightarrow 4 \rightarrow 15 \rightarrow 2 \) 
- with equal roots. In this case, we can compute
- the length of the resulting cycle as 1 plus the sum of the path-lengths to the node where the two paths
- join. In the diagram, the paths join at node 4, and the cycle length is computed as 1 + 4 + 1 = 6.
+The first diagram in Figure \ref{fig:cuckoo} illustrates the directed cuckoo graph on \( N = 8 + 8 \) nodes after edges (2, 15), (4, 
+9), (8, 5), (4, 15), (12, 11), (10, 5) and (4, 13) are added. In order to add the 8th edge (10, 11), we follow the paths \( 10 
+\rightarrow 5 \rightarrow 8 \) and \( 11 \rightarrow 12 \) to find the different roots 8 and 12. Since the latter path is shorter, we 
+reverse the path to \( 12 \rightarrow 11\) such that we can add the new edge as (\( 11 \rightarrow 10\) ), resulting in the middle 
+diagram. In order to add the 9th edge (10, 13) we now find the path from 10 to be the shorter one, so we reverse the path and add the 
+new edge as (\( 10 \rightarrow 13\)), resulting in the right diagram. When adding the 10th edge (8, 9), we find the paths
+ \( 8 \rightarrow 5 \rightarrow 10 \rightarrow 13 \rightarrow 4  \rightarrow 15 \rightarrow 2 \) and \( 9 \rightarrow 4 \rightarrow 15 
+ \rightarrow 2 \)  with equal roots. In this case, we can compute the length of the resulting cycle as 1 plus the sum of the path-
+ lengths to the node where the two paths join. In the diagram, the paths join at node 4, and the cycle length is computed as 1 + 4 + 1 
+ = 6.
 
-The reason we choise Cuckoo Cycle as PoW is as follows.
-There would be much more transactions than blocks in Bitcoin, and full-nodes
-must check PoW for all transactions. Therefor full-nodes would verify
-PoW function much more time than Bitcoin. So we should not use heavy-weight PoW function (e.g.\ cryptonight or scrypt).
-On the other hand ASICs and FPGAs should not be effective for PoW.
-So we select Cuckoo Cycle, which  uses a few hundreds MBytes of memory.
-PoW time is dominated mainly by  memory access speed, so ASICs and FPGAs are not effective.
-Also it is much more light-weight to verify the PoW than cryptonight or scrypt.
-
-We will use parameters:
+The Cuckoo Cycle has been chosen as the PoW function for the following reasons:
 
 \begin{itemize}
-	\item \(cycle = 20\) to minimize the size impact to transactions.
-    \item number of nodes = \( 2^{25} \). Memory usage should be around 128MB.
+\item We anticipate significantly higher daily transaction volumes compared to that of Bitcoin, this is due to the fact that unlike Bitcoin, the fee-less nature of Aidos Kuneen means the economic disincentive against frequently sending small transactions is removed. 
+
+\item Unlike Bitcoin, which requires unprocessed transactions to wait in a staging area (known as the mempool) until they can be included in a block, Aidos Kuneen instantly includes transactions into iMesh as they arrive. These transactions however still require validation in the form of PoW. This means that Aidos Kuneen does not have the luxury of allowing transactions to simply wait in line until the network is ready to process them.
+
+\item Unlike other typical PoW algorithms such as Cryptonight or Scrypt which are typically quite resource intensive, the Cuckoo Cycle requires only a few hundred megabytes of memory, making it ideal for IoT devices.
+
+\item In order to prevent an attacker from being able to propagate fraudulent transactions throughout the network, specialist hardware such as ASICs and FPGAs should not provide any advantage. As the PoW time is mainly dominated by memory access speed, specialist processing hardware is essentially rendered ineffective.
+\end{itemize}
+
+The following Cuckoo Cycle parameters will be used for PoW operations:
+
+\begin{itemize}
+	\item \(cycle = 20\) to minimize the size impact on transactions.
+    \item number of nodes = \( 2^{25} \). To provide memory usage of around 128MB.
     \item \(easiness = 100\% \) to prevent optimizations e.g. by edge trimming.
 \end{itemize}
 
