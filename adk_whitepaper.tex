@@ -539,74 +539,87 @@ The following Cuckoo Cycle parameters will be used for PoW operations:
     \item \(easiness = 100\% \) to prevent optimizations e.g. by edge trimming.
 \end{itemize}
 
-\section{Cooperative Proof of Work}
-\label{sec:copow}
+\section{Co-operative Proof of Work}
+\label{sec:coPoW}
 
-For IoTs, whose performance is low, we introduce cooperative Proof of Work called \emph{coPoW}.
-By coPoW, each senders can do PoW together with one transaction in which  senders' transactions are mixed up.
-By coPoW we can utilize the IoT feature which the number of them is enormous.
+To cater specifically for IoT devices (whose performance is typically quite low), we introduce a novel co-operative Proof of Work 
+mechanism known as \emph{coPoW}. By utilising coPoW, the network is able to group a number of unverified transactions together into a 
+single, larger transaction known as a `Batch'. This allows the senders of the individual transactions within the Batch to effectively 
+pool their computational power into validating the Batch as a unit, rather than just their own individual transactions.
+coPow effectively acts like a decentralised version of a Bitcoin mining pool and allows large numbers of lower powered devices to interact directly with the network as if they were a single, much more powerful device.
 
-coPoW acts like a mining pool in Bitcoin in decentralized manner:
+coPoW functions as follows:
 
 \vspace{-0.5\baselineskip}
 \begin{enumerate}
 	\setlength\itemsep{0em}
-	\item One who wants to join coPoW broadcasts a request to network via full-node.
-	\item Others who also want to join coPoW or are already doing coPoW response its request.
-	\item He joins to the coPoW group
-	\item He does leader selection, or he gets who is the leader.
-	\item He sends his transaction to the leader and gets mixed transactions from the leader.
-	\item He starts PoW.
-	\item He periodically sends result of PoW to the leader.
-	\item He periodically receives PoW result of other parties from the leader. 
-	\item If any of their results are incorrect he leaves the group.
-	\item The leader rejects members who don't send their results in a certain period or send incorrect result. In this case the leader
-	sends a restart command to members.
-	\item Once he receives a result which matches to the final target, he finishes coPoW.
+	\item A sender wishing to participate in coPoW broadcasts a request to network via a full-node.
+	\item Others who wish to participate or are already performing coPoW respond to the request.
+	\item The sender joins the coPoW group
+	\item If the group is not yet established a process of leader selection is performed, if the group is already established then 
+	the new device receives the identity of the existing leader.
+	\item The sender sends his transaction to the leader who then mixes it with the transactions from all the other participants to 
+	form a Batch.
+	\item All senders commence PoW on the Batch.
+	\item The sender periodically sends the result of their PoW to the leader.
+	\item The sender periodically receives the PoW results from other parties via the leader. 
+	\item If any of the parties submit incorrect results they are ejected from the group.
+	\item If any of the parties fail to submit their results within a set period of time, the leader ejects that party and then 
+	delivers a restart command to all remaining parties.
+	\item The process continues until one of the parties sucessfully solves for the target hash, after which PoW is completed and 
+	the group is disbanded.
 \end{enumerate}
 
-Parties in a coPoW group must send their result (nonce of transaction) periodically whose hash 
-is easier than the final target (\emph{target for proof}). This prevents free riders, who joined the coPoW but actually doesn't do PoW.
-Target for proof could be variable. For example, target for proof = final target \(  \times 2^5 \) could be for groups for IoT devices,
-target for proof = final target  \( \times 2^2 \) could be for groups for normal PCs.
+Parties participating in a coPoW group must periodically send their result (the nonce of their latest attempt) to the leader to prove 
+that they are actively participating in the group. This prevents free-loading by parties who join the group but do not intend to 
+actively contribute. The (\emph{target for proof}) threshold is set such that the hash is less complex than the final (\emph{target for 
+proof}) hash, this is important to ensure that devices with limited computational capacity are able to complete sucessfully fulfil the 
+target for proof within the required time period. The target for proof itself can be variable. For example, target for proof = final 
+target \(  \times 2^5 \) could be adopted for groups of low capacity IoT devices, and the target for proof = final target  \( \times 
+2^2 \) could adopted for normal desktop PCs.
 
-Members in a group could use Tor for anonymity.
-
+For added anonymity, particpants in a coPoW group have the option to utilise the TOR network for all communications between themselves 
+and the group. 
 
 \section{AKShuffle}
 \label{sec:aks}
 
-For anonymity we use \emph{AKShuffle}. In AKShuffle, we utilize zero-knowledge non-interactive (ZKNI) proof for
-anonymous payment. By ZKNI one can proof that her value satisfies some functions without revealing her secret key.
-For example Alice has input \(x\)  and key \( k \)  for an encryption function \( f_{k}(x) \) and shows \( y=f_k(x) \) to Bob.
-Bob wants to know Alice really has \(k\), but Alice doesn't want to reveal her \(k\).
-By ZKNI  she can prove she really has \( k\).
+For increased anonymity we employ \emph{AKShuffle}. Within AKShuffle we utilize a zero-knowledge, non-interactive (ZKNI) proof for
+anonymous transactions. By utilising ZKNI, one can prove that their value satisfies a set of functions without the need to reveal their 
+secret key. For example: Alice has input \(x\) and key \( k \) for an encryption function \( f_{k}(x) \), and shares \( y=f_k(x) \) 
+with Bob. Bob wants to know if Alice really has key \(k\), but Alice doesn't want to reveal her secret key to Bob. By employing ZKNI, 
+Alice can prove to Bob that she really have key \( k\) without the need to ever actually having to show him the key itself.
 
-We utilize ZKBoo (ZKB++) mentioned in~\cite{zkb} for ZKNI. ZKBoo uses only a hash and an encryption function (AES) which are quantum-safe \cite{pqcrypto}.
-
+Aidos Kuneen utilizes `ZKBoo (ZKB++)' as presented in~\cite{zkb} as its ZKNI mechanism. ZKBoo requires only the use of a hash and an 
+AES encryption function which has been shown to be quantum secure \cite{pqcrypto}.
 
 \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{shuffle.png}
-	  \caption{An example of AKShuffle.}
+	  \caption{An example of how AKShuffle operates}
     \label{fig:shuffle}
 	\end{center}
  \end{figure}
 
- Figure~\ref{fig:shuffle} illustrates transactions related to AKShuffle. One who wants to shuffle her coins sends her coins to a shuffle address.
- The shuffle address is an output of an encryption \( f_{k_{my}}(x_{my}) \) with key \( k_{my} \). 
- \(k_{my}\) is her secret key  and \(x_{my}\) is her public input.
- Some day she wants to  withdraws her shuffled coin. She creates one transaction which sends to her normal address \(PK_{my_2}\) (his XMSS public key).
- The transaction has her AKShuffle address \( f_{k_{my}}(x_{my}) \) with others' AKShuffle addresses 
+With reference to Figure~\ref{fig:shuffle}, the operation of AKShuffle is described as follows:
+
+Any user who desires to shuffle their tokens simply sends them to an AKShuffle address.
+The shuffle address is an output of the encryption \( f_{k_{my}}(x_{my}) \) with key \( k_{my} \)-  
+where \(k_{my}\) is the secret key  and \(x_{my}\) is the public input.
+If at any point the user desires to withdraw their shuffled tokens they simply create a transaction which sends the tokens to their 
+normal address \(PK_{my_2}\) (ie: their XMSS public key).
+The transaction contains the user's AKShuffle address \( f_{k_{my}}(x_{my}) \) along with other user's AKShuffle addresses 
 \( f_{k_{1}}(x_{1}) \), \( f_{k_{2}}(x_{2}) \) \dots \( f_{k_{n}}(x_{n}) \) as input addresses. 
-This means nobody knows which address is really used for spending. As signature she fills in ZKNI proof proving she knows \( k_{my} \) such that 
-one of AKShuffle addresses in inputs equals  to \( f_{k_{my}}(x_{my}) \). The transaction also includes her public input \( x_{my} \)
-to prevent to reuse the shuffle address. Values in transactions must be same.
+This means that nobody knows which address has actually been used for the withdrawal. 
+In order to prove ownership the user completes the ZKNI proof by proving they know \( k_{my} \) such that one of the AKShuffle 
+addresses listed as an input equals \( f_{k_{my}}(x_{my}) \). 
+The transaction also includes the user's public input \( x_{my} \) in order to prevent to reuse the shuffle address. It is also 
+important to point out that the user is required to withdraw the full amount that they originally deposited, 
+the system will not allow partial withdrawals of the user's balance in order to preserve anonymity.
 
-Notice that transactions for AKShuffle and ones for normal payment are different. AKShuffle (ZKBoo) is used only for shuffling one's coin.
-In another word, one cannot use AKShuffle for paying to another.
-This is because signature size of ZKBoo is bigger (around 500 KBytes if number of input addresses is 5).
-
+Note: Transactions used for AKShuffle and transactions user for normal payments are completely different. AKShuffle (ZKBoo) is used 
+only for shuffling one's tokens. As such, one cannot use AKShuffle to send tokens directly to another user. This is due to the fact 
+that the signature size of ZKBoo is quite large weighing in at around 500 kilobytes for 5 input addresses for example.
 
 \section{Network}
 \label{sec:network}
