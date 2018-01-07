@@ -13,7 +13,7 @@
 \usepackage{titling}
 \usepackage{makeidx}
 \usepackage{url}
-\SetWatermarkText{DRAFT}
+\SetWatermarkText{}
 \SetWatermarkScale{1}
 \geometry{
 a4paper,
@@ -627,30 +627,27 @@ that the signature size of ZKBoo is quite large weighing in at around 500 kiloby
 \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{network.png}
-	  \caption{Full-nodes and clients (wallets) in Aidos Kuneen.}
+	  \caption{Aidos Kuneen network topology}
     \label{fig:network}
 	\end{center}
  \end{figure}
 
- Figure~\ref{fig:network} illustrates network in Aidos Kuneen.
-Network for Aidos Kuneen is built with full-nodes in P2P fashion. Clients can connect to these full-nodes
-or their own full-nods via API. Clients can send APIs to broadcast their transactions etc, normally by wallet application.
- Between full-nodes transactions are sent and received each other by using some efficient protocol (e.g. msgpack\footnote{https://msgpack.org/})
- to reduce packet sizes. 
+As illustrated in Figure~\ref{fig:network}, the Aidos Kuneen network is comprised of a series of full-nodes who communicate in a P2P fashion. 
+Clients can either connect directly to these full-nodes or to their own full-node via API. Clients are able to send API requests in order to broadcast their transactions to the network (this is usually performed automatically
+by the wallet application). Between full-nodes, transactions are sent and received using an efficient protocol (e.g. msgpack\footnote{https://msgpack.org/}) in order to reduce packet sizes.
+Note: The exact choice of communication protocol is currently under review.
 
-We also use Tor for anonymity between public full-nodes and clients. This is because 
-full-node can know their clients IP address and what the client sent.  We don't use Tor between full-nodes because efficiency between
-full-nodes is critical. Also  there is no way to know who sends the transaction first in network because transactions are relied between 
-full-nodes repeatedly.
+In order to ensure anonymity between public full-nodes and clients we utilise the Tor network. This is essential as full-nodes
+may otherwise receive sensitive information such as their client's IP address and details of the client's transactions.  
 
-We would build Kademlia network to use peer discovery scheme in the future for post-quantum anonymity network. 
-Unfortunately Tor is not post-quantum, but Tor has big number of participants. We use the benefits of the merit
-for strong anonymity for now. But in the future there also many participants in Aidos Kuneen we could build our own anonymous network.
-Also we are planning to distribute transactions for more scalability, i.e.\ one full-node don't hold all transactions but can get any certain
-transactions from others on network.
-We are still investigating for the scheme.
+It is important to note that Tor is not employed for communications between full-nodes. This is due to the fact that routing traffic via the Tor network introduces an unavoidable element of delay into inter-nodal communications, and efficiency between full-nodes 
+is a critical aspect of the speed of the entire Aidos Kuneen network. Additionally, there is little need to enforce anonymous comunication between nodes, this is due to the fact that even if the initial client-to-node connection were not secured with Tor, the initial receiving node 
+does not transmit any sensitive information about the client when it relays the transaction to the other nodes.
 
-Table~\ref{tbl:cmd} shows commands of packets.
+Unfortunately however, Tor is not quantum secure. Though, Tor does have the have the advantage of being a well established, trusted network with a large number of participants. We believe that for the short term at least, the strong anonymitiy provided 
+by the Tor network is an excellent fit for Aidos Kuneen. We will continue to investigate other potential methods of providing quantum-resistant anonymitiy as they become available. 
+
+Table~\ref{tbl:cmd} lsits the basic packet commands for the Aidos Kuneen network.
 
 %\clearpage
 
@@ -678,89 +675,91 @@ Table~\ref{tbl:cmd} shows commands of packets.
 \end{tabularx}
   \end{table}
 
-
-\section{Leaves in iMesh}
+\section{Leaves within iMesh}
 \label{sec:leaves}
 
 \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{leaves.png}
-	  \caption{Leaves in iMesh}
+	  \caption{Leaves within iMesh}
     \label{fig:leaves}
 	\end{center}
  \end{figure}
 
-As we mentioned in Section~\ref{sec:imesh}, speed of confirmation
-depends on the number of leaves \( N_{leaves} \) in iMesh. This is because more leaves exists,
-possibility  that one transaction is referred  will be less(Figure~\ref{fig:leaves}).
-Some scenarios could make leaves increase.
+As mentioned previously in Section~\ref{sec:imesh}, the speed of confirmation
+depends heavily on the number of leaves \( N_{leaves} \) in iMesh. This is due to the fact that as the number of leaves within iMesh increases,
+the probability that a new transaction will refer to any one leaf reduces Figure~\ref{fig:leaves}).
 
-First scenario is that lazy senders intentionally could refer non-leaves transactions for his transaction.
-This adds one leaves without decreasing number of leaves. But the sender is discouraged to be lazy.
-As we mentioned confirmation time depends on number of ascendant transactions,
-so receiver would refuse its payment if the receiver thinks sender is intentionally lazy.
-Second, one transaction \(T_1\) could come into iMesh while another \(T_2\) are doing PoW.
-\(T_1\) and \(T_2\) might refer same transactions.
-This scenario is not avoidable because it could happen by chance regardless senders' intent.
-In third scenario attackers could broadcast many transactions and try to increase enormous leaves to make confirmations slower.
-This scenario could be much discouraged by PoW.
+There are a number of scenarios in which the number of leaves could conceivably increase:
 
-To solve second problem,
-we could increase number of referring transactions in one transaction \( N_{ref} \) 
-to decrease \( N _{leaves} \) (to converge iMesh). But it makes the transaction size bigger.
-We want to know the optimal  \( N_{ref} \)  to converge iMesh by modeling the behavior of iMesh.
+The first scenario is that an attacker might seek to slow down iMesh by intentionally referring to non-leaf transactions.
+This would have the effect of adding additional, unreferenced leaves to the DAG, thus decreasing the overall efficiency of the entire network.
 
-We assume the process of incoming transactions can be modeled by a Poisson flow, and the time to  complete PoW can be modeled by exponential distribution.
-So let \(\lambda_{in}\) the rate of the Poisson flow , and \(1 / \lambda_{pow}\) is the expectation of the time to complete PoW.
-Senders make his transaction at rate \(\lambda_{in}\)  and finish PoW in  \(1/\lambda_{pow}\) in average.
-This transaction includes referring transactions \( N_{ref}\).
-While doing PoW, others might also being making their transaction and might include same transactions.
-The fact that  \( N_{ref} (t) \)  depends on  \( N_{ref} (t-t')\) (i.e.\ status in past) makes it difficult 
-to solve \( N_{ref}\). Hence we do simulation the behaviour of \( N_{ref}\).
+In order to combat this situation we could set \( N_{ref}=8\) to help prevent attackers from increasing the number of leaves indiscriminantly.
+If we combine this with the fact that an attacker can only add one new leaf per transaction, we will find that (provided the attacker does not control more than 50% of the total network hash power) that honest transactions will rapidly 
+reference the attacker's new leaves, thus integrating them into the DAG and preventing the uncontrolled growth of unreferenced leaves.
 
-Algorithm~\ref{alg:sim1}  shows the algorithm to simulate number of leaves in iMesh.
-We fix  \(1 / \lambda_{pow} = 10 \) minutes (which means PoW has finished in 10 minutes
-in average), and simulate with \(N_{ref}\ = 2, 4, 8, 16, 32 \).
-And we simulate 4 types of  \(\lambda_{in} \).
+In a similar situation to scenario one, an attacker may seek to spam the network by broadcasting a large number of very low (or even zero value) transactions to either himself or an accomplice in an attempt create a large number of leaves in a short 
+amount of time thus causing confirmation times to significantly increase. This is easily prevented by the existing requirement to complete PoW for evey transaction, regardless of the value being transacted.
+
+In the third scenario, one transaction \(T_1\) could enter into iMesh while another, \(T_2\), is still in the process of being validated (ie: still undergoing PoW) and has not yet been accepted into iMeash..
+Thus \(T_1\) and \(T_2\) may actually both be referring to the same reference transaction.
+This scenario is not necessarily the result of malicious intent, and could conceivably arise as the result of an honest mistake on the user's part.
+
+To solve this problem, we could increase the number of referring transactions for any one transaction \( N_{ref} \) in order 
+to decrease \( N _{leaves} \) (ie: to converge iMesh). However, this has the undersirable side effect of increasing the transaction size.
+As such, we need to determine the optimal \( N_{ref} \) value in order to converge iMesh, while still seeking to maintain a small transaction size. 
+
+To this end, we will now present a simulation of the behavior of iMesh.
+
+Firstly, we assume the process of incoming transactions can be modelled by a Poisson flow, the size of a transaction is given by \(32 \times N_{ref}\) bytes, and the time to complete PoW can be modelled by exponential distribution.
+So, let \(\lambda_{in}\) equal the rate of the Poisson flow, \(|Tx|\) equal the transaction size, and \(1 / \lambda_{pow}\) equal the expectated time to complete PoW.
+Therefore, we can say that on average, users will produce transactions at rate of \(\lambda_{in}\) and will complete PoW in \(1/\lambda_{pow}\). Note: the transaction rate includes referring transactions \( N_{ref}\).
+
+While a user is performing PoW, other users will be generating new transactions and these transactions will likely include some of the same reference transactions as the transaction currently undergoing PoW.
+The fact that \( N_{ref} (t) \) depends on \( N_{ref} (t-t')\) (i.e.\ the status in the past) makes it difficult 
+to solve for \( N_{ref}\) directly. Hence, it becomes necessary to simulate the behaviour of \( N_{ref}\):
+
+Algorithm~\ref{alg:sim1} shows the algorithm used to simulate the number of leaves in iMesh.
+If we take \(1 / \lambda_{pow} = 10 \) minutes and simulate with \(N_{ref}\ = 2, 4, 8, 16, 32 \) across the following rates of input transactions \(\lambda_{in} \):
 
 \vspace{-0.5\baselineskip}
 \begin{enumerate}
 	\setlength\itemsep{0em}
-\item 1 transaction per minute \\
- This parameter assumes that a few transactions come into iMesh for
-early days in iMesh
-\item 1 TPS(transaction per second)
-\item 5 TPS \\
- This is the maximum rate in Bitcoin occurred in May 2017.
- \item 10 TPS
+\item \(\lambda_{in} \)=1 transaction per minute \\
+ (This models the early days of iMesh when the user base is small)
+\item \(\lambda_{in} \)=1 TPS(transaction per second)
+\item \(\lambda_{in} \)=5 TPS \\
+ (This is the peak transaction speed in the Bitcoin network as occurred in May 2017)
+ \item \(\lambda_{in} \)=10 TPS
 \end{enumerate}
 
 	\begin{algorithm}[ht]                  
-		\caption{Simulation for counting leaves in iMesh}         
+		\caption{Simulation for the number of leaves within iMesh}         
 		\label{alg:sim1}
 		\begin{algorithmic}
-			\STATE{INPUT  \(N_{ref}\): number of direct referring transaction}
-			\STATE{INPUT \(T_{sim}\): simulation time}
-			\STATE{INPUT \(\lambda_{in}\):  process of incoming transactions }
-			\STATE{INPUT \(\lambda_{pow}\): period to  complete PoW }
-			\STATE{OUTPUT: number of leaves for each time}
+			\STATE{INPUT  \(N_{ref}\): number of directly referring transactions}
+			\STATE{INPUT \(T_{sim}\): number of iterations}
+			\STATE{INPUT \(\lambda_{in}\): rate of incoming transactions}
+			\STATE{INPUT \(\lambda_{pow}\): time to complete PoW }
+			\STATE{OUTPUT: number of leaves}
 			\STATE{}
 	\STATE{\(time=0\) //current time}
-	\STATE{\(pow\_txs=\{\} \) //transactions which are doing PoW}
+	\STATE{\(pow\_txs=\{\} \) //transactions which are undergoing PoW}
 	\STATE{\(txs=\{\} \)//transactions in iMesh}
 	\WHILE{\(time < T_{sim}\)}
-		\STATE{\(step \Leftarrow \)  an exponentially distributed value at rate \(\lambda_{in}\)}
+		\STATE{\(step \Leftarrow \) an exponentially distributed value at rate \(\lambda_{in}\)}
 		\STATE{\(time \Leftarrow time + step\)}
 	
 		\STATE{}
 	\STATE{//add a new transaction to the transaction list}
-	\STATE{//with a period to finish PoW.}
+	\STATE{//with a period to complete PoW.}
 	\STATE{make new transaction \(t_{new}\)}
 	\STATE{\(t_{new}.is\_leaf \Leftarrow true\)}
 	\STATE{\(leaves \Leftarrow \) select random \(N_{ref}\) leaves in \(txs\)}
 	\STATE{\(t_{new}.leaves \Leftarrow leaves\)}
-	\STATE{\(pow\_time \Leftarrow \)  an exponentially distributed value at rate \(\lambda_{pow}\)}
-	\STATE{\(t_{new}.pow\_time  \Leftarrow time + pow\_time\)}
+	\STATE{\(pow\_time \Leftarrow \) an exponentially distributed value at rate \(\lambda_{pow}\)}
+	\STATE{\(t_{new}.pow\_time \Leftarrow time + pow\_time\)}
 	\STATE{append \(t_{new}\) to \(pow\_txs\)}
 	
 	\STATE{}
@@ -779,64 +778,65 @@ early days in iMesh
 	\end{algorithmic}
 		\end{algorithm}
 
-		Figure~\ref{fig:min1_2} \textasciitilde~\ref{fig:sec10} in Appendix shows the simulation results.
-	 The result of \( N_{ref}=8,16,32\) for \( \lambda_{in}=1\) transaction per minute are not shown
-	 because these result are much similar to  one of \( N_{ref}=4\).
+	Figure~\ref{fig:min1_2} \textasciitilde~\ref{fig:sec10} in Appendix A show the results of the simulation.
+	 The result of \( N_{ref}=8,16,32\) for \( \lambda_{in}=1\) transactions per minute are not included
+	 as these results essentially the same as those of \( N_{ref}=4\).
 
-	 From these results number of leaves \( N_{leaves}\) decreases in an proportional manner following to the number of \( N_{ref} \).
-	 Even when  \( \lambda_{in}=1\) transaction per minute, \( N_{ref}=2\) is not enough to converge DAG fully
-	 (  \( N_{leaves}\) is around 3 \textasciitilde 26 ),
+	 From these results, we can see that the number of leaves \( N_{leaves}\) decreases in proportion to the increasing value of \( N_{ref} \).
+	 Even when \( \lambda_{in}=1\) transaction per minute, \( N_{ref}=2\) is not enough to fully converge the DAG, ( \( N_{leaves}\) is around 3 \textasciitilde 26 ),
 	 and \( N_{ref} \ge 4\)  is better ( \( N_{leaves}\) = 1 \textasciitilde 18).
-	 Further for other \( \lambda_{in}\), \( N_{ref}=2\) is much worse than other \( N_{ref}\).
-	 For example at \( \lambda_{in}=5\) TPS,  \( N_{leaves} \simeq 3800 \) when \( N_{ref}=2\),
-	\( N_{leaves} \simeq 500\)  when \( N_{ref}=8\). We \emph{should NOT} use \( N_{ref}=2\) if we assume 
-	transactions comes into iMesh at same speed as Bitcoin.
-	Time to converge DAG is below 3000 seconds (50 minutes) except \( N_{ref}=2\) when \( \lambda_{in}=10\) TPS.
- 
-	 We also simulate how the number of  transactions \( N_{descendant} \) which refers directly and indirectly to one transaction grows 
-	 for each cases above. Figure~\ref{fig:min1_ref} \textasciitilde~\ref{fig:sec10_ref} in Appendix shows the results.
+	 Furthermore, when we look at the other \( \lambda_{in}\) values, we notice that \( N_{ref}=2\) is considerably worse than the other \( N_{ref}\) values.
+	 For example, at \( \lambda_{in}=5\) TPS,  \( N_{leaves} \simeq 3800 \) when \( N_{ref}=2\),
+	\( N_{leaves} \simeq 500\)  when \( N_{ref}=8\). Therefore, it is clear that we \emph{should NOT} use \( N_{ref}=2\) if we assume 
+	transactions enter into iMesh at same speed as Bitcoin.
+	The time to converge DAG is below 3000 seconds (50 minutes) for all values of \( N_{ref} \) except \( N_{ref}=2\) when \( \lambda_{in}=10\) TPS.
+	
+	It should also me be mentioned that as \(|Tx|\) exhibits simple linear behaviour and doubles with each increase in the value of \( N_{ref} \), from a purely transaction size focued point of view, we should seek 
+	to minimise the \( N_{ref} \) value.
+	
+	We also simulate how the number of transactions \( N_{descendant} \) which refer directly and indirectly to any one transaction grow 
+	 for each of the cases mentioned previously. Figure~\ref{fig:min1_ref} \textasciitilde~\ref{fig:sec10_ref} in Appendix A illustrates these results.
 	 
-	 In these figures x-axis means the number of transaction which comes into iMesh
-	 after iMesh becomes stable. Y-axis means \( N_{descendant} \) 
-	 (descendant transactions) of one random transaction. The graph would becomes a diagonal (linear) line if \( N_{descendant} \) grows ideally.
-	 When  \( \lambda_{in}=\) 1 transaction per minute,   graphs of all \( N_{ref}\) are almost diagonal.
-	 But more  \( \lambda_{in}\) increases,  \( N_{descendant} \) becomes less.
-	 For example when  \( \lambda_{in}\) =5 TPS,  \( N_{descendant} \) 
-	 doesn't increase diagonally even after  25000 transactions  ( \( 25000 \times 0.2\) seconds \(\simeq 1.39 \) hours in average) at \( N_{ref} \)  = 2.
-At \( N_{ref}\) = 8 after  4000 transactions  ( \( 4000 \times 0.2\) seconds \(\simeq 13.3 \) minutes in average),
- \( N_{descendant} \) starts to increase linearly.
+	 In these figures, the x-axis shows the number of transactions which enter into iMesh (after iMesh has become stable). The y-axis shows \( N_{descendant} \) 
+	 (the number of descendant transactions) for one random transaction. The graph would becomes a diagonal (linear) line if \( N_{descendant} \) were to grow at an ideal rate.
+	 When \( \lambda_{in}=\) 1 transaction per minute, the graphs of all \( N_{ref}\) are almost diagonal.
+	 But, as \( \lambda_{in}\) increases,  \( N_{descendant} \) reduces.
+	 For example, when \( \lambda_{in}\) =5 TPS, \( N_{descendant} \) 
+	 does not increase diagonally even after  25000 transactions ( \( 25000 \times 0.2\) seconds \(\simeq 1.39 \) hours on average) at \( N_{ref} \) = 2.
+When \( N_{ref}\)= 8 and after 4000 transactions ( \( 4000 \times 0.2\) seconds \(\simeq 13.3 \) minutes on average),
+ \( N_{descendant}\) starts to increase linearly.
 
+	 As such, we believe that the best course of action is to allow \( N_{ref}\) to remain as a variable. \( N_{ref}=8\) will be adopted at the initial setting, due to the fact that 
+	 even if iMesh were to grow to \( \lambda_{in}=5\) TPS, (which is the maximum TPS
+	 in Bitcoin) \( N_{ref}=8\) still allows iMesh converge at around \#leaves=500. 
+	 Additionally, as discussed previously, setting \( N_{ref}=8\) will
+	 help to prevent attackers from increasing the number of leaves indiscriminantly.
+	
+ 	 As iMesh continues to grow we will review the \( N_{ref}\) variable in order to maintain optimal network performance.
+ 	 
+\section{Future Plans}
+\label{sec:future plans}
 
-	 Our decision is that we make \( N_{ref}\) be variable and
-	 for now we set the default to 8. 
-	 Even if iMesh grows to  \( \lambda_{in}=5\) TPS, which is the maximum TPS
-	 in Bitcoin,  \( N_{ref}=8\) makes iMesh well converge around \#leaves=500. 
-	 Also \( N_{ref}=8\)  could
-	 help to prevent attackers to increase leaves.
-	 They can add at most one leaf per one transaction.  We are assuming attackers have half of the whole hash power, so 
-	 of honest transactions refer 8 transactions then 
-	 these leaves would be converged very soon.
-
- 	 We could re-view the default number once iMesh will grow higher.
+	The following plans are intended to be integrated into the Aidos Kuneen network in the future:
+	 
+	 Distribute transactions between nodes to allow increased scalability, i.e.\ a single full-node does not hold all transactions within the network but instead query other nodes in the network as required.
+		 
+	Implement a Kademlia based scheme for post-quantum secure, distributed peer discovery.
 
 	  \section{Conclusion}
 \label{sec:conc}
 
-We presented  a new cryptocurrency \emph{Aidos Kuneen}.
-Aidos Kuneen employs \emph{iMesh} where all transactions are directly referred each others and forms  DAG structure.
-To prevent  double spendings we utilize `SPECTRE' which determines a legit transaction from DAG structure.
-We employ a hash-based signature `XMSS' as a signature scheme for quantum computer resistance.
-For anonymity we utilize \emph{AKShuffle} which uses zero-knowledge proof `ZKBoo (ZKB++)` for post-quantum.
-For IoTs we introduce cooperative Proof of Work called \emph{coPoW}, by which each senders can do PoW together.
-Finally we simulate the number of leaves in iMesh, and look into the behaviour.
-
-Our open problem is the size of transactions. The size is about 3 KBytes for normal transactions and
-500 KBytes for AKShuffle transactions. We continue to research better signature schemes and anonymity scheme
-for post quantum.
+In this whitepaper we have presented the new cryptocurrency \emph{Aidos Kuneen}.
+Aidos Kuneen employs \emph{iMesh} where all transactions are directly referred to each other in order to form a DAG structure.
+To prevent double spending we utilize `SPECTRE' to determine the legitimacy of all transactions.
+We employ the hash-based signature `XMSS' as the signature scheme for post-quantum resistance.
+For anonymity we utilize \emph{AKShuffle} which utilises the zero-knowledge proof `ZKBoo (ZKB++)` for post-quantum security.
+To cater for the future growth of the IoT sector we introduce a novel cooperative Proof of Work mechanism called \emph{coPoW}, which allows low powered devices to combined their resources and perform PoW as a group.
+Finally, we provided a simulation of the number of leaves within iMesh, and the expected behaviour of the network as the network grows.
 
 \newpage
 \begin{table}[htb]
-	\caption{Specification of Aidos Kuneen}
+	\caption{Aidos Kuneen: Technical Specifications}
     \label{tbl:spec}
 	\begin{tabularx}{\linewidth}{XX} 
 		\toprule
@@ -848,18 +848,17 @@ Minimum Unit & 0.00000001 (\(10^{-8})\) ADK \\
 \midrule
 PoW Algorithm & Cuckoo Cycle\\ 
 \midrule
-Anonymity & AKShuffle (post quantum zero knowledge proof)  and Tor \\
+Anonymity & AKShuffle (post-quantum zero knowledge proof) and Tor \\
 \midrule
 Consensus Algorithm & SPECTRE \\ \midrule
 Distributed Ledger & iMesh (transaction DAG) \\
 \midrule
 Signature Scheme & XMSS (post quantum hash based signature)\\ 
 \midrule
-Usage &  IoT, Finance, Banks, Commerce \\ 
+Usage &  IoT Micropayments, Finance, Banking, Digital Commerce \\ 
 \bottomrule
 \end{tabularx}
   \end{table}
-
 
   \twocolumn[
 	\begin{@twocolumnfalse}
