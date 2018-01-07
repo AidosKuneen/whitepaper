@@ -28,6 +28,8 @@ top=20mm,
 \begin{center}
 \LARGE
 \includegraphics[width=50mm]{logo-min}\\[\bigskipamount]
+Aidos Kuneen \\ 
+\Large
 }
 \posttitle{
 	\normalsize
@@ -35,12 +37,12 @@ top=20mm,
 
 
 
-\title{Aidos Kuneen \\ --- A Blockless and Anonymous Cryptocurrency for the Post-Quantum Era ---}
+\title{--- A Blockless and Anonymous Cryptocurrency for the Post-Quantum Era ---}
 
 \author{
 	Aidos Developer \and Aidos Foundation
 }
-\date{January, 2018 \\ Version 0.035.\\ THIS IS A DRAFT. THIS LINE MUST BE INCLUDED IN TRANSLATIONS.}
+\date{January, 2018 \\ Version 0.035\\ THIS IS A DRAFT\@. THIS LINE MUST BE INCLUDED IN ALL TRANSLATIONS.}
 
 
 \begin{document}
@@ -63,11 +65,11 @@ top=20mm,
 		provides for both a small signature and small public key size which in turn reduces network load.
 	
 		In order to provide anonymity within the network, Aidos Kuneen employs \emph{AKShuffle}. AKShuffle 	
-		incorporates the post-quantum, Zero-knowledge proof `ZKBoo (ZKB++)', this allows for truly anonymous transfers 
+		incorporates the post-quantum, zero-knowledge proof `ZKBoo (ZKB++)', this allows for truly anonymous transfers 
 		throughout the entire network.
 		
 		To allow Aidos Kuneen to service the expected future growth of the `IoT' sector we introduce an innovative new 
-		co-operative Proof of Work mechanism known as \emph{coPoW}. coPoW allows a number of senders within the network to 
+		co-operative Proof of Work mechanism known as \emph{coPoW}\@. coPoW allows number of senders within the network to 
 		co-operatively perform the necessary Proof of Work in order to confirm the transactions on the network, thus reducing 
 		the physical processing requirements of any one sender.
 		
@@ -79,12 +81,12 @@ top=20mm,
 
 		\vspace{0.5cm}
 
-Copyright \copyright 2017-2018 by Aidos Developer and Aidos Foundation. \\
+Copyright \( \copyright \)  2017--2018 by Aidos Developer and Aidos Foundation.
 
 IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE WHITEPAPER OR THE USE OR OTHER DEALINGS IN
-THE WHITEPAPER. \\
+THE WHITEPAPER\@.\\
 
 This work is licensed under a Creative Commons Attribution 4.0 International License. \\
 \url{http://creativecommons.org/licenses/by/4.0/} \\
@@ -104,7 +106,7 @@ then cryptographically validated by powerful computers known as `miners' using a
 validated it is then appended to the end of a continually growing chain of blocks aptly named `the block-chain'. Miners are subsequently
 rewarded for sucessfully validating a block by means of the transaction fees paid by senders who transact on the Bitcoin network.
 Currently, blocks are added to the blockchain at a rate of approximately one every 10 minutes. The transactions contained within the
-blocks consist of both input and output addresses, with the inputs themselves being the outputs of previous transactions - this provides
+blocks consist of both input and output addresses, with the inputs themselves being the outputs of previous transactions --- this provides
 an auditable history of all past Bitcoin transactions within the network. In order to prove ownership, transactions are signed by the 
 address owner with an Elliptic Curve Digital Signature Algorithm (ECDSA).
 
@@ -122,7 +124,7 @@ However, in recent years a number of problems have been identified with the Bitc
 	point it will no longer make sense to send small transactions via the Bitcoin network and the fee would be greater than the 
 	value of the Bitcoin being transacted. This forces senders to use complicated schemes to send small value trasnactions (e.g. 
 	micropayment channels).
-	\item{Weak Cryptographic Strength Against Quantum Computers}\mbox{}\\ 
+	\item{Weak Cryptographic Strength Against Quantum Computers}\\ 
 	As of 2017, the development of quantum computers is still in its infancy. However, experiments have already been carried out in 
 	which quantum computational operations were executed on a small number of quantum bits. Furthermore, Google has reported its 
 	intent to commercialize quantum technologies within the next five years~\cite{google}.At the same time, according to Shor's 
@@ -166,8 +168,8 @@ for our application. Eventually, the `eXtended Merkle Signature Scheme' (XMSS) w
 usability and small key size. XMSS allows us to repeatedly utilise the same public key a large number of times (1000 times or more). 
 However, unlike SPHINCS, XMSS has a lightweight public key of only 32 bytes and a signature key size of approximately 3 kilobytes. By utlising XMSS we also benefit from \( 2^{128} \) bit post-quantum security.~\cite{recom}.
 
-\item{Strong Anonymity}\mbox{}\\ 
-In order to achieve anonymity, we utilize the post-quantum, zero-knowledge, non-interactive(ZKNI) proof `ZKBoo' as presented 
+\item{Strong Anonymity}\\ 
+In order to achieve anonymity, we utilize the post quantum, zero knowledge, non interactive (ZKNI) proof `ZKBoo' as presented 
 in~\cite{zkboo}. ZKBoo allows one to transact with an address which itself is the output of encryption, thus one is able to exchange 
 tokens freely without the need to reveal their secret key to either the receiving address or to the wider network.
 \end{itemize}
@@ -186,7 +188,7 @@ cryptography\footnote{post-quantum Zcash (https://github.com/zcash/zcash/issues/
 \noindent
 {\bf CoinJoin\footnote{https://en.bitcoin.it/wiki/CoinJoin}}
 
-Another potential option for providing anonymity, would be to use `CoinJoin' or one of its variants (e.g. `CoinShuffle'). However, 
+Another potential option for providing anonymity, would be to use `CoinJoin' or one of its variants (e.g.\ `CoinShuffle'). However, 
 CoinJoin requires the presence of active participants at the same time one intends to send tokens. This requirement could prove to be a 
 handicap in the early stages of adoption when there are a low number of users of Aidos Kuneen. 
 \\
@@ -292,15 +294,15 @@ to gather all public keys into one single key. This then allows one public key t
 Initally, one must generate \( 2^h \) WOTS+ private keys \( Priv_{ij}, i = 1 \ldots 2^h ,  j=1 \ldots 67\) and the
 corresponding WOTS+ public keys \( Pub_{ij}, i = 1 \ldots 2^h , j=1 \ldots 67 \)  (\(h\):height of Merkle Tree). We denote \( Pub_{ij} , 
 j=1 \ldots 67 \) as  \( Pub_{i} \). Then, a series of `ltrees' are generated from each public key. One receives the root hash of the 
-ltree by hashing the ltree together with its sibling WOTS+ public key ( e.g.  \( Pub_{i} \) and  \( Pub_{i+1} \) ) repeatedly. This root 
+ltree by hashing the ltree together with its sibling WOTS+ public key (e.g.  \( Pub_{i} \) and  \( Pub_{i+1} \)) repeatedly. This root 
 hash becomes one of the leaves in the Merkle Tree. This operation is then repeated \( 2^h \) times to produce a number of ltrees 
 equivalent to the number of private keys, these ltrees are then used to fill out the remaining leaves of the Merkle Tree. Finally, the 
-root hash of the Merkle Tree is caclulated by hashing together the leaves of the Merkle Tree (i.e. roots of ltrees). This root hash 
+root hash of the Merkle Tree is caclulated by hashing together the leaves of the Merkle Tree (i.e.\ roots of ltrees). This root hash 
 becomes the XMSS public key..
 
 When signing, one simply selects one of the unused private keys and its corresponding public key and calculates the WOTS+ signature. The 
 XMSS signature is the WOTS+ signature with an `auth path'. The auth path is an additional piece of binary data used to calculate the 
-root hash of the Merkle Tree (i.e. the XMSS public key).
+root hash of the Merkle Tree (i.e.\ the XMSS public key).
 
 \begin{figure}[ht]
 	\begin{center}
@@ -312,7 +314,7 @@ root hash of the Merkle Tree (i.e. the XMSS public key).
 
 With reference to Figure~\ref{fig:xmss_auth}, we desire to select private key \#3 for signing. A verifier can calculate node \#3 from the 
 signer's signature. However, in order to determine node \#12 the verifier will first need to determine node \#4, this means that the auth 
-path must include node \#4. In the same manner, in order to determine node \#31's root hash (i.e. the XMSS public key), the signer also 
+path must include node \#4. In the same manner, in order to determine node \#31's root hash (i.e.\ the XMSS public key), the signer also 
 requires nodes \#11 and \#22 to be included within the auth path. Thus, in order to perform the verification, the verifier must posess the 
 WOTS+ signature and the node values along the auth path (ie: the values ofns odes \#4, \#11 and \#22). This will allow the verifier to 
 calculate the root hash of the Merkle Tree and determine if the root has is equal to the XMSS public key.
@@ -324,7 +326,7 @@ Note that:
 	\item Signers must record which private keys are used, in order to accomplish this we use the Logarithmic Merkle Tree Traversal 
 	scheme as presented in \cite{traverse} to provide efficient traversal and minimal storage cost. \item The public key consists of 
 	\(32 \times 2 \) bytes (the root hash of the Merkle Tree and the seed of PRF).	There is only one PRF seed, as all pseudo random 
-	values can be generated from a single PRF. We include the seed as a part of the signature such that the public key size becomes 
+	values can be generated from a single PRF\@. We include the seed as a part of the signature such that the public key size becomes 
 	32 bytes. \item  The signature key size is approximately 3 kilobytes. \item The SHA-256 hash provides strong preimage resistance 
 	(i.e.\ an attacker is ubale to guess the input from the output of hash), thus it is difficult to guess the private key from the 
 	public key, even when using quantum based hardware.
@@ -374,7 +376,7 @@ leaves are included in the senders transaction.
  \end{figure}
 
 Unlike block-chain based networks such as Bitcoin, where a block refers only to the preceding block, a single transaction in a DAG 
-refers to many other transactions within the DAG. With block-chain tecnhnology, the chain grows in a linear sequence (ie: one block at a 
+refers to many other transactions within the DAG\@. With block-chain tecnhnology, the chain grows in a linear sequence (ie: one block at a 
 time), whereas within a DAG the interlinked nature of the transactions allow it to grow simultaneously in all directions, thus leading 
 to superior scalability compared to block-chain based systems.
 
@@ -382,7 +384,7 @@ However, this interlinked nature is not without its drawbacks when it comes to c
 address holds a total of 10 tokens. She sends 10 tokens to Bob in transaction T1, and then without thinking she sends 10 tokens to Cathy 
 in another transaction T2. Alice has inadvertently attempted to spend the same tokens twice (this is known as a `double spend')
 and as a result these 2 transactions are now in direct conflict. In a block-chain based system, once one of the conflicting transactions 
-has been written into a block, the other will be never stored, (i.e. if T1 receives at least one confirmation before T2, then T2 will be 
+has been written into a block, the other will be never stored, (i.e.\ if T1 receives at least one confirmation before T2, then T2 will be 
 rendered invalid).On the other hand when there are conflicting transactions (highlighted in red in Figure\ref{fig:imesh}) within iMesh, 
 it is difficult to determine which is valid. To solve this problem, Aidos Kuneen adopts the voting mechanism as presented in 
 `SPECTRE'~\cite{spectre}.
@@ -415,7 +417,7 @@ This system guarantees majority amplification, as these transactions add votes t
  \item  Transactions which do not have both transactions X and Y as parents vote for which ever has the majority of voters (transaction 
  1--5)\\.
  This rule allows amplification of the votes of parents of transaction X (transaction 1--4). This is necessary to counter a `pre-mining 
- attack' scheme, i.e. the attacker builds blocks and withholds them from the network. Due to the fact that honest transactions tend to 
+ attack' scheme, i.e.\ the attacker builds blocks and withholds them from the network. Due to the fact that honest transactions tend to 
  have a greater number of ancestor transactions, an honest transaction should receive more votes by means of procedure 1 and 2.
  \end{enumerate}
 
@@ -423,7 +425,7 @@ Note: SPECTRE is resilient against attackers with up to 50\% of the network's to
 as demonstrated in~\cite{spectre}.
 
  Additionally, in iMesh receivers must also wait for their transaction to be confirmed by a sufficient number of other transactions 
- (much like waiting for a number of `confirms' Bitcoin) prior to spending. ~\cite{spectre} provides guidance on how long receivers 
+ (much like waiting for a number of `confirms' Bitcoin) prior to spending.~\cite{spectre} provides guidance on how long receivers 
  should wait before trusting a new transaction. For comparison, let's assume that we will wait for 5 confirmations before accepting a 
  payment on the Bitcoin network. Let's also assumethat an attacker has managed to gain control of 30\% of the total hash power in the 
  Bitcoin network. The possibility of success of such an attack is 17.8\%\cite{btc}. Similarly, in iMesh with the SPECTRE voting scheme 
@@ -475,23 +477,23 @@ While it is acknowledged that the presence of a centralised system such as The A
 vision of a completely decentralised cryptocurrency. The Arbiter, for the reasons outlined previously, is accepted to be a
 `necessary evil' until such time as the network has matured to the point where it is capable of resiting attack on its own. 
 Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less XX to its user base, the presence of The Arbiter 
-allows the realisation of this vision from day one, with no need to resort to alternative, "incentivised" mechanisms for early network 
+allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' mechanisms for early network 
 protection.
 
 \section{Proof of Work}
 \label{sec:PoW}
 
 When sending a transaction, senders must first perform `Proof of Work' (PoW), similar to that which is performed by miners in the 
-Bitcoin network). The mandatory performance of PoW prior to sending a transaction is necessary in order to protect iMesh from DDoS 
+Bitcoin network. The mandatory performance of PoW prior to sending a transaction is necessary in order to protect iMesh from DDoS 
 attacks via spam transactions and double spend attacks (as previously discussed). In addition, PoW is used to distribute the 
 computational workload of validating transactions between all participants in the network. This ensures that the network does not 
-become constrained by the limitations in processing capabilities of a handful of "masternodes", but instead remains completely free to 
+become constrained by the limitations in processing capabilities of a handful of `masternodes', but instead remains completely free to 
 scale as required. During the PoW operation each transaction is assigned a 20 character, 32-bit integer field known as a `nonce'. 
 The value of this nonce is set such that the hash of the block will contain a leading run of zeros and form a 20 character cycle known 
 as a `Cuckoo Cycle'.The leading run of zeroes determines the time required for the PoW operation and has been chosen to produce an 
-average PoW time of 5-10 minutes.
+average PoW time of 5--10 minutes.
 
-For PoW operations, Aidos Kuneen implements a Cuckoo Cycle as discussed in \cite{cuckoo}. The Cuckoo Cycle arises by the insertion of
+For PoW operations, Aidos Kuneen implements a Cuckoo Cycle as discussed in~\cite{cuckoo}. The Cuckoo Cycle arises by the insertion of
 keys into a `Cuckoo Hashtable' which naturally leads to the cyclic formation of random bipartite graphs. A Cuckoo Hashtable consists of 
 two identical tables, each with a unique hash function which maps a key to a table location (this provides two possible locations for 
 each key). Upon arrival of a new key, its table location is first determined. If both possible locations are currently occupied by 
@@ -508,10 +510,10 @@ location, and an edge for every inserted key, connecting the two locations at wh
 	\end{center}
  \end{figure}
 
-The first diagram in Figure \ref{fig:cuckoo} illustrates the directed cuckoo graph on \( N = 8 + 8 \) nodes after edges (2, 15), (4, 
+The first diagram in Figure~\ref{fig:cuckoo} illustrates the directed cuckoo graph on \( N = 8 + 8 \) nodes after edges (2, 15), (4, 
 9), (8, 5), (4, 15), (12, 11), (10, 5) and (4, 13) are added. In order to add the 8th edge (10, 11), we follow the paths \( 10 
 \rightarrow 5 \rightarrow 8 \) and \( 11 \rightarrow 12 \) to find the different roots 8 and 12. Since the latter path is shorter, we 
-reverse the path to \( 12 \rightarrow 11\) such that we can add the new edge as (\( 11 \rightarrow 10\) ), resulting in the middle 
+reverse the path to \( 12 \rightarrow 11\) such that we can add the new edge as (\( 11 \rightarrow 10\)), resulting in the middle 
 diagram. In order to add the 9th edge (10, 13) we now find the path from 10 to be the shorter one, so we reverse the path and add the 
 new edge as (\( 10 \rightarrow 13\)), resulting in the right diagram. When adding the 10th edge (8, 9), we find the paths
  \( 8 \rightarrow 5 \rightarrow 10 \rightarrow 13 \rightarrow 4  \rightarrow 15 \rightarrow 2 \) and \( 9 \rightarrow 4 \rightarrow 15 
@@ -535,8 +537,8 @@ The following Cuckoo Cycle parameters will be used for PoW operations:
 
 \begin{itemize}
 	\item \(cycle = 20\) to minimize the size impact on transactions.
-    \item number of nodes = \( 2^{25} \). To provide memory usage of around 128MB.
-    \item \(easiness = 100\% \) to prevent optimizations e.g. by edge trimming.
+    \item number of nodes = \( 2^{25} \). To provide memory usage of around 128MB\@.
+    \item \(easiness = 100\% \) to prevent optimizations e.g.\ by edge trimming.
 \end{itemize}
 
 \section{Co-operative Proof of Work}
@@ -591,7 +593,7 @@ with Bob. Bob wants to know if Alice really has key \(k\), but Alice doesn't wan
 Alice can prove to Bob that she really have key \( k\) without the need to ever actually having to show him the key itself.
 
 Aidos Kuneen utilizes `ZKBoo (ZKB++)' as presented in~\cite{zkb} as its ZKNI mechanism. ZKBoo requires only the use of a hash and an 
-AES encryption function which has been shown to be quantum secure \cite{pqcrypto}.
+AES encryption function which has been shown to be quantum secure~\cite{pqcrypto}.
 
 \begin{figure}[ht]
 	\begin{center}
@@ -633,8 +635,8 @@ that the signature size of ZKBoo is quite large weighing in at around 500 kiloby
  \end{figure}
 
 As illustrated in Figure~\ref{fig:network}, the Aidos Kuneen network is comprised of a series of full-nodes who communicate in a P2P fashion. 
-Clients can either connect directly to these full-nodes or to their own full-node via API. Clients are able to send API requests in order to broadcast their transactions to the network (this is usually performed automatically
-by the wallet application). Between full-nodes, transactions are sent and received using an efficient protocol (e.g. msgpack\footnote{https://msgpack.org/}) in order to reduce packet sizes.
+Clients can either connect directly to these full-nodes or to their own full-node via API\@. Clients are able to send API requests in order to broadcast their transactions to the network (this is usually performed automatically
+by the wallet application). Between full-nodes, transactions are sent and received using an efficient protocol (e.g.\ msgpack\footnote{https://msgpack.org/}) in order to reduce packet sizes.
 Note: The exact choice of communication protocol is currently under review.
 
 In order to ensure anonymity between public full-nodes and clients we utilise the Tor network. This is essential as full-nodes
@@ -688,7 +690,7 @@ Table~\ref{tbl:cmd} lsits the basic packet commands for the Aidos Kuneen network
 
 As mentioned previously in Section~\ref{sec:imesh}, the speed of confirmation
 depends heavily on the number of leaves \( N_{leaves} \) in iMesh. This is due to the fact that as the number of leaves within iMesh increases,
-the probability that a new transaction will refer to any one leaf reduces Figure~\ref{fig:leaves}).
+the probability that a new transaction will refer to any one leaf reduces Figure~\ref{fig:leaves}.
 
 There are a number of scenarios in which the number of leaves could conceivably increase:
 
@@ -696,7 +698,7 @@ The first scenario is that an attacker might seek to slow down iMesh by intentio
 This would have the effect of adding additional, unreferenced leaves to the DAG, thus decreasing the overall efficiency of the entire network.
 
 In order to combat this situation we could set \( N_{ref}=8\) to help prevent attackers from increasing the number of leaves indiscriminantly.
-If we combine this with the fact that an attacker can only add one new leaf per transaction, we will find that (provided the attacker does not control more than 50% of the total network hash power) that honest transactions will rapidly 
+If we combine this with the fact that an attacker can only add one new leaf per transaction, we will find that (provided the attacker does not control more than 50\% of the total network hash power) that honest transactions will rapidly 
 reference the attacker's new leaves, thus integrating them into the DAG and preventing the uncontrolled growth of unreferenced leaves.
 
 In a similar situation to scenario one, an attacker may seek to spam the network by broadcasting a large number of very low (or even zero value) transactions to either himself or an accomplice in an attempt create a large number of leaves in a short 
@@ -728,7 +730,7 @@ If we take \(1 / \lambda_{pow} = 10 \) minutes and simulate with \(N_{ref}\ = 2,
 	\setlength\itemsep{0em}
 \item \(\lambda_{in} \)=1 transaction per minute \\
  (This models the early days of iMesh when the user base is small)
-\item \(\lambda_{in} \)=1 TPS(transaction per second)
+\item \(\lambda_{in} \)=1 TPS (transaction per second)
 \item \(\lambda_{in} \)=5 TPS \\
  (This is the peak transaction speed in the Bitcoin network as occurred in May 2017)
  \item \(\lambda_{in} \)=10 TPS
@@ -742,7 +744,7 @@ If we take \(1 / \lambda_{pow} = 10 \) minutes and simulate with \(N_{ref}\ = 2,
 			\STATE{INPUT \(T_{sim}\): number of iterations}
 			\STATE{INPUT \(\lambda_{in}\): rate of incoming transactions}
 			\STATE{INPUT \(\lambda_{pow}\): time to complete PoW }
-			\STATE{OUTPUT: number of leaves}
+			\STATE{OUTPUT\@: number of leaves}
 			\STATE{}
 	\STATE{\(time=0\) //current time}
 	\STATE{\(pow\_txs=\{\} \) //transactions which are undergoing PoW}
@@ -783,13 +785,13 @@ If we take \(1 / \lambda_{pow} = 10 \) minutes and simulate with \(N_{ref}\ = 2,
 	 as these results essentially the same as those of \( N_{ref}=4\).
 
 	 From these results, we can see that the number of leaves \( N_{leaves}\) decreases in proportion to the increasing value of \( N_{ref} \).
-	 Even when \( \lambda_{in}=1\) transaction per minute, \( N_{ref}=2\) is not enough to fully converge the DAG, ( \( N_{leaves}\) is around 3 \textasciitilde 26 ),
-	 and \( N_{ref} \ge 4\)  is better ( \( N_{leaves}\) = 1 \textasciitilde 18).
+	 Even when \( \lambda_{in}=1\) transaction per minute, \( N_{ref}=2\) is not enough to fully converge the DAG, (\( N_{leaves}\) is around 3 \textasciitilde~26),
+	 and \( N_{ref} \ge 4\)  is better (\( N_{leaves}\) = 1 \textasciitilde~18).
 	 Furthermore, when we look at the other \( \lambda_{in}\) values, we notice that \( N_{ref}=2\) is considerably worse than the other \( N_{ref}\) values.
 	 For example, at \( \lambda_{in}=5\) TPS,  \( N_{leaves} \simeq 3800 \) when \( N_{ref}=2\),
 	\( N_{leaves} \simeq 500\)  when \( N_{ref}=8\). Therefore, it is clear that we \emph{should NOT} use \( N_{ref}=2\) if we assume 
 	transactions enter into iMesh at same speed as Bitcoin.
-	The time to converge DAG is below 3000 seconds (50 minutes) for all values of \( N_{ref} \) except \( N_{ref}=2\) when \( \lambda_{in}=10\) TPS.
+	The time to converge DAG is below 3000 seconds (50 minutes) for all values of \( N_{ref} \) except \( N_{ref}=2\) when \( \lambda_{in}=10\) TPS\@.
 	
 	It should also me be mentioned that as \(|Tx|\) exhibits simple linear behaviour and doubles with each increase in the value of \( N_{ref} \), from a purely transaction size focued point of view, we should seek 
 	to minimise the \( N_{ref} \) value.
@@ -802,8 +804,8 @@ If we take \(1 / \lambda_{pow} = 10 \) minutes and simulate with \(N_{ref}\ = 2,
 	 When \( \lambda_{in}=\) 1 transaction per minute, the graphs of all \( N_{ref}\) are almost diagonal.
 	 But, as \( \lambda_{in}\) increases,  \( N_{descendant} \) reduces.
 	 For example, when \( \lambda_{in}\) =5 TPS, \( N_{descendant} \) 
-	 does not increase diagonally even after  25000 transactions ( \( 25000 \times 0.2\) seconds \(\simeq 1.39 \) hours on average) at \( N_{ref} \) = 2.
-When \( N_{ref}\)= 8 and after 4000 transactions ( \( 4000 \times 0.2\) seconds \(\simeq 13.3 \) minutes on average),
+	 does not increase diagonally even after  25000 transactions (\( 25000 \times 0.2\) seconds \(\simeq 1.39 \) hours on average) at \( N_{ref} \) = 2.
+When \( N_{ref}\)= 8 and after 4000 transactions (\( 4000 \times 0.2\) seconds \(\simeq 13.3 \) minutes on average),
  \( N_{descendant}\) starts to increase linearly.
 
 	 As such, we believe that the best course of action is to allow \( N_{ref}\) to remain as a variable. \( N_{ref}=8\) will be adopted at the initial setting, due to the fact that 
@@ -834,7 +836,7 @@ For anonymity we utilize \emph{AKShuffle} which utilises the zero-knowledge proo
 To cater for the future growth of the IoT sector we introduce a novel cooperative Proof of Work mechanism called \emph{coPoW}, which allows low powered devices to combined their resources and perform PoW as a group.
 Finally, we provided a simulation of the number of leaves within iMesh, and the expected behaviour of the network as the network grows.
 
-\newpage
+%\newpage
 \begin{table}[htb]
 	\caption{Aidos Kuneen: Technical Specifications}
     \label{tbl:spec}
@@ -844,7 +846,7 @@ Finally, we provided a simulation of the number of leaves within iMesh, and the 
 		\midrule
 Total Supply & 25,000,000 ADK \\ 
 \midrule
-Minimum Unit & 0.00000001 (\(10^{-8})\) ADK \\ 
+Minimum Ticker & 0.00000001 (\(10^{-8})\) ADK \\ 
 \midrule
 PoW Algorithm & Cuckoo Cycle\\ 
 \midrule
@@ -855,7 +857,7 @@ Distributed Ledger & iMesh (transaction DAG) \\
 \midrule
 Signature Scheme & XMSS (post quantum hash based signature)\\ 
 \midrule
-Usage &  IoT Micropayments, Finance, Banking, Digital Commerce \\ 
+Usage &  Finance, Banking, Digital Commerce, IoT Micropayments \\ 
 \bottomrule
 \end{tabularx}
   \end{table}
@@ -899,7 +901,7 @@ Usage &  IoT Micropayments, Finance, Banking, Digital Commerce \\
 		
 	\bibitem{spectre}
 	Yonatan Sompolinsky, Yoad Lewenberg, and Aviv Zohar, 
-		\emph{SPECTRE:	Serialization of Proof-of-work Events: Confirming Transactions via Recursive Elections}, 2016.
+		\emph{SPECTRE\@:	Serialization of Proof-of-work Events: Confirming Transactions via Recursive Elections}, 2016.
 	
 	\bibitem{shor}
 	Peter W. Shor, 
@@ -930,8 +932,8 @@ Usage &  IoT Micropayments, Finance, Banking, Digital Commerce \\
 	Michael Szydlo,
 		\emph{Merkle Tree Traversal in Log Space and Time}, 2004.	
 
-		\bibitem{pqcrypto}
-		,PQCRYPTO,
+	\bibitem{pqcrypto}
+		PQCRYPTO,
 			\emph{Post-Quantum Cryptography for Long-Term Security}, 2015.	
 	
 
