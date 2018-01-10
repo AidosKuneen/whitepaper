@@ -694,7 +694,7 @@ amount of time, thus causing confirmation times to significantly increase. This 
 
 In the third scenario, one transaction \(T_1\) could enter into iMesh while another, \(T_2\), is still in the process of being validated (i.e.\ still undergoing PoW) and has not been yet seen in iMesh.
 Thus \(T_1\) and \(T_2\) may actually both be referring to the same reference transaction.
-This scenario is not necessarily the result of malicious intent, and could conceivably arise as the result of a normal operation on the honest user's part.
+This scenario is not necessarily the result of malicious intent, infact, it could be expected to occur quite frequently during normal network operation.
 
 To solve this problem, we could increase the number of referring transactions for any one transaction, \( N_{ref} \), in order 
 to decrease \( N _{leaves} \) (i.e.\ to converge iMesh). However, this has the undesirable side effect of increasing the transaction size.
