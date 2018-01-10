@@ -205,7 +205,7 @@ least in the short to medium term, binary based systems will continue to remain 
 
 Regarding the choice of consensus algorithm, if we follow the confirmation process as outlined in IOTA's white paper, which counts only the number of referring transactions 
 (descendant transactions), we notice that as the total number of leaves in the DAG increases (as will occur naturally), 
-the percentage of these leaves to which decendant transactions refer will decrease.
+the percentage of these leaves to which descendant transactions refer will decrease.
 This means that attackers could potentially grow their malicious
 transactions faster than the network. To combat this we introduce a confirmation process based on \emph{SPECTRE} as presented 
 in~\cite{spectre}. In SPECTRE one does not only count the number of descendant transactions, but one also counts the number of other 
@@ -516,8 +516,8 @@ The Cuckoo Cycle has been chosen as the PoW function for iMesh, due to the follo
 	\item We anticipate significantly higher daily transaction volumes compared to that of Bitcoin, this is due to the fact that unlike Bitcoin, the fee-less nature of Aidos Kuneen means the economic disincentive against frequently sending small transactions is removed. Thus we need a faster verification. \\
 Unlike other typical PoW algorithms such as Cryptonight or Scrypt which are typically quite resource intensive, full-node can verify the validity of nonces much faster than them by Cuckoo Cycle. 
 
-\item Unlike Bitcoin, in which  only PoWs in blocks are required to be verified, in Aidos Kuneen PoWs in all transactions must be verified. Apperantly there are much more transactions than blocks, therefore 
-Aidos Kuneen requirse more power for verification of PoW. Thus a fster verification of Cuckoo Cycle meets the requirement.
+\item Unlike Bitcoin, in which  only PoWs in blocks are required to be verified, in Aidos Kuneen PoWs in all transactions must be verified. Apparently there are much more transactions than blocks, therefore 
+Aidos Kuneen requires more power for verification of PoW. Thus a faster verification of Cuckoo Cycle meets the requirement.
 
 \item In order to prevent an attacker from being able to propagate fraudulent transactions throughout the network, specialist hardware such as ASICs and FPGAs should not provide any advantage. As the PoW time is mainly dominated by memory access speed, specialist processing hardware is essentially rendered ineffective.
 \end{itemize}
@@ -606,7 +606,7 @@ In order to prove ownership the user completes the ZKNI proof by proving they kn
 addresses listed as an input equals \( f_{k_{my}}(x_{my}) \). 
 The transaction also includes the user's public input \( x_{my} \) in order to prevent to the reuse of the shuffle address. It is also 
 important to point out that the user is required to withdraw the full amount that they originally deposited, 
-the system will not allow partial withdrawals of the user's balance becasuse withdraw is forbidded for more than twice with same shuffle address.
+the system will not allow partial withdrawals of the user's balance because withdraw is forbidden for more than twice with same shuffle address.
 
 Note: Transactions used for AKShuffle and transactions user for normal payments are completely different. AKShuffle (ZKBoo) is used 
 only for shuffling one's tokens. As such, one cannot use AKShuffle to send tokens directly to another user. This is due to the fact 
