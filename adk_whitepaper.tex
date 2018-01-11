@@ -430,8 +430,8 @@ as is demonstrated in~\cite{spectre}.
  transactions increases, the waiting time required for a transaction to be verified as legitimate by the network will decrease (i.e.\ the 
  larger the network grows the faster it becomes). Conversely, when the network is small, the waiting times are very long, the 
  network hash power is also likely to be quite small and this is an opportunity that an attacker may attempt to exploit. 
-In order to prevent this potential attack vector, we introduce a mechanism known as the `The Arbiter', discussed in Section~\ref{sec:arbiter}, 
-to confirm transactions between trusted full-nodes defined by each full-nodes while iMesh is still in its infancy.
+In order to prevent this potential attack vector, we introduce a mechanism known as the `The Arbiter' (as discussed in Section~\ref{sec:arbiter}), 
+to confirm transactions between trusted full-nodes while iMesh is still in its infancy.
 
 In the voting scheme, senders have an incentive to refer to as many transactions as they can due to the confirmation speed of the 
 sender's transaction being directly related to the number of referring transactions. If a sender were to refer to only a small number of 
@@ -442,34 +442,35 @@ It must also be noted that if there are many leaves within iMesh, the possibilit
 transaction would reduce. To combat this we need to carefully consider how many transactions should be referred to by any one single 
 transaction. We will explore this issue in greater detail within Section~\ref{sec:leaves}.
 
-\subsection{The Arbiter}
-\label{sec:arbiter}
-
+\subsection{The Semi Trusted Consensus Model}
+\label{sec:stcm}
 
 As mentioned in the previous section, we must assume that during iMesh's infancy period an attacker with access to sufficient resources 
-could realistically command the majority of the total network hash power. It is for this reason that we are therefore unable to trust the
-SPECTRE consensus mechanism during the early stages of network growth. Thus we must introduce `The Arbiter', a temporary system which 
-uses Ripple's `federated byzantine agreement'  explained in~\cite{ripple} to validate transactions until such time as the SPECTRE consensus mechanism can take over.
-Each trusted nodes agree with one of transactions in iMesh along with a serial number  as the `timestamp'(The Arbiter).
+could realistically command the majority of the total network hash power. It is for this reason that we are therefore unable to fully 
+trust the SPECTRE consensus mechanism during the early stages of network growth. Thus we must introduce `The STCM', a temporary 
+system which utilises Ripple's `federated byzantine agreement' as detailed in~\cite{ripple}, in order to validate transactions until 
+such time as the SPECTRE consensus mechanism can take over.
 
-With this system in place:
+With The STCM system in place, a group of trusted nodes periodically review randomly selected transactions from within iMesh, known as `Statements' in order to determine their validity.
+
+The process of validating a Statement is as follows:
 
 \vspace{-0.5\baselineskip}
 \begin{enumerate}
 	\setlength\itemsep{0em}
-	\item Each node defines addresses from trusted nodes in their trusted list.
-	\item One of trusted nodes broadcast one Arbiter to others.
-	\item Each server then amalgamates the Arbiter of all servers on its trusted list, and votes on the veracity
-	of the Arbiter.
+	\item Each full-node defines the addresses of trusted nodes within their trusted list
+	\item One of the full-nodes selects a Statement (ie: a transaction) for review and broacasts it to the other full nodes
+	\item Each full-node then elevates the statement to the trusted nodes within their trusted list
+	\item Together, the trusted nodes form a group known as The STCM, which then reviews the legitimacy of the statement.
+	\item Each of the trusted nodes in The STCM applies the same ruleset to to its own transaction history in order to determine the legitimacy of the statement
+	\item Once all trusted nodes in The STCM have arrived at a decision on the legitimacy of the statement, the verdict of a particular trusted node is relayed to all the full-nodes to whom it is referenced by
+\item Each full node then amalgamates the verdicts of all trusted nodes on its trusted list, and casts its vote based on the majority consensus of its trusted list
 	\item Transactions that receive more than a minimum percentage of `yes' votes are passed on to the next
-	round, if the Arbiter doesn't receive enough votes it will be discarded
-	\item The final round of consensus requires a minimum
-	percentage of 80\% of a server's trusted nodes agreeing on the Arbiter.
+	round, if the Statement doesn't receive enough votes it will be discarded
+	\item The final round of consensus requires a minimum percentage of 80\% of a server's trusted nodes in agreement in order to accept the Statement
 \end{enumerate}
 
-Transactions which The Arbiter deems to be 
-legitimate are subsequently regarded as `trusted transactions' by the nodes and any conflicting transaction are discarded. The rules 
-employed by The Arbiter in order to determine the validity of conflicting transactions are as follows:
+Transactions which The STCM deems to be legitimate are subsequently regarded as `trusted transactions' by the full-nodes and any conflicting transaction are discarded. The rules employed by The STCM in order to determine the validity of conflicting transactions are as follows:
 
 \begin{itemize}
 	\item The transaction which is confirmed earlier is deemed to be valid, and all others are considered to be invalid.
@@ -479,12 +480,13 @@ employed by The Arbiter in order to determine the validity of conflicting transa
 	is deemed to be valid.
 \end{itemize}
 
-This federated byzantine agreement needs over 80\% of agreement of trusted nodes not to stop confirmation, and needs over 20\% of agreement not to legitimate fraudulent transactions.
-While it is acknowledged that the  byzantine agreement suffers from these restrictions which does directly contradict Aidos Kuneen's ultimate 
-vision of a completely decentralised cryptocurrency, The Arbiter, for the reasons outlined previously, is accepted to be a
+This federated byzantine agreement method requires a minimum of 80\% agreement between trusted nodes in order to accept a Statement as legitimate, and by extension, 20\% or less in order to reject a fraudulent Statement.
+While it is acknowledged that introduction of The Semi Trusted Consensus Model does directly contradict Aidos Kuneen's ultimate 
+vision of a completely decentralised cryptocurrency, The STCM, for the reasons outlined previously, is accepted to be a
 `necessary evil' until such time as the network has matured to the point where it is capable of resisting attack on its own. 
 Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less product to its user base,
-the presence of The Arbiter allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' mechanisms for early network protection.
+the presence of The STCM allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' 
+mechanisms for early network protection.
 
 \section{Proof of Work}
 \label{sec:PoW}
