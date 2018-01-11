@@ -692,7 +692,7 @@ amount of time, thus causing confirmation times to significantly increase. This 
 
 In the third scenario, one transaction \(T_1\) could enter into iMesh while another, \(T_2\), is still in the process of being validated (i.e.\ still undergoing PoW) and has not yet appeared in iMesh.
 Thus \(T_1\) and \(T_2\) may actually both be referring to the same reference transaction.
-This scenario is not necessarily the result of malicious intent, infact, it could be expected to occur quite frequently during normal network operation.
+This scenario is not necessarily the result of malicious intent, in fact, it could be expected to occur quite frequently during normal network operation.
 
 To solve this problem, we could increase the number of referring transactions for any one transaction, \( N_{ref} \), in order 
 to decrease \( N _{leaves} \) (i.e.\ to converge iMesh). However, this has the undesirable side effect of increasing the transaction size.
@@ -816,7 +816,7 @@ When \( N_{ref}\)= 8 and after 4000 transactions (\( 4000 \times 0.2\) seconds \
 	i.e.\ a single full-node does not hold all transactions 
 	 within the network but instead queries other nodes in the network as required
 	\item Implement a Kademlia based scheme for Tor-like anonymity, post-quantum security and distributed peer discovery.
-	\item IMplement a more sophisticated ZKNI algorithm in order to reduce the transaction sizes.
+	\item Implement a more sophisticated ZKNI algorithm in order to reduce the transaction sizes.
 	\end{enumerate}
 
 	  \section{Conclusion}
