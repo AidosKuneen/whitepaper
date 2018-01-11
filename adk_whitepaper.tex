@@ -430,7 +430,8 @@ as is demonstrated in~\cite{spectre}.
  transactions increases, the waiting time required for a transaction to be verified as legitimate by the network will decrease (i.e.\ the 
  larger the network grows the faster it becomes). Conversely, when the network is small, the waiting times are very long, the 
  network hash power is also likely to be quite small and this is an opportunity that an attacker may attempt to exploit. 
-In order to prevent this potential attack vector, we introduce a mechanism known as the `The Arbiter', discussed in Section~\ref{sec:arbiter}, to deterministically confirm transactions while iMesh is still in its infancy.
+In order to prevent this potential attack vector, we introduce a mechanism known as the `The Arbiter', discussed in Section~\ref{sec:arbiter}, 
+to confirm transactions between trusted full-nodes defined by each full-nodes while iMesh is still in its infancy.
 
 In the voting scheme, senders have an incentive to refer to as many transactions as they can due to the confirmation speed of the 
 sender's transaction being directly related to the number of referring transactions. If a sender were to refer to only a small number of 
@@ -446,11 +447,27 @@ transaction. We will explore this issue in greater detail within Section~\ref{se
 
 
 As mentioned in the previous section, we must assume that during iMesh's infancy period an attacker with access to sufficient resources 
-could realistically command the majority of the total network hash power. It is for this reason that we are therefore unable to trust an 
-automatic consensus mechanism during the early stages of network growth. Thus we must introduce `The Arbiter', a temporary system which 
-acts as a trusted, centralised mechanism to validate transactions until such time as the automatic consensus mechanism can take over.
+could realistically command the majority of the total network hash power. It is for this reason that we are therefore unable to trust the
+SPECTRE consensus mechanism during the early stages of network growth. Thus we must introduce `The Arbiter', a temporary system which 
+uses Ripple's `federated byzantine agreement'  explained in~\cite{ripple} to validate transactions until such time as the SPECTRE consensus mechanism can take over.
+Each trusted nodes agree with one of transactions in iMesh along with a serial number  as the `timestamp'(The Arbiter).
 
-With this system in place, each node defines one explicitly trusted address (The Arbiter), transactions which The Arbiter deems to be 
+With this system in place:
+
+\vspace{-0.5\baselineskip}
+\begin{enumerate}
+	\setlength\itemsep{0em}
+	\item Each node defines addresses from trusted nodes in their trusted list.
+	\item One of trusted nodes broadcast one Arbiter to others.
+	\item Each server then amalgamates the Arbiter of all servers on its trusted list, and votes on the veracity
+	of the Arbiter.
+	\item Transactions that receive more than a minimum percentage of `yes' votes are passed on to the next
+	round, if the Arbiter doesn't receive enough votes it will be discarded
+	\item The final round of consensus requires a minimum
+	percentage of 80\% of a server's trusted nodes agreeing on the Arbiter.
+\end{enumerate}
+
+Transactions which The Arbiter deems to be 
 legitimate are subsequently regarded as `trusted transactions' by the nodes and any conflicting transaction are discarded. The rules 
 employed by The Arbiter in order to determine the validity of conflicting transactions are as follows:
 
@@ -462,13 +479,12 @@ employed by The Arbiter in order to determine the validity of conflicting transa
 	is deemed to be valid.
 \end{itemize}
 
-Within iMesh, a trusted transaction must refer back to a previous transaction to allow its `time stamp' to be properly defined.
-In order to ensure The Arbiter itself does not become corrupted, each full node confirms proper compliance with The Arbiter's ruleset for each trusted transaction. The Arbiter's decision is regarded as invalid if any one of these rules is found to have been breached.
-
-While it is acknowledged that the presence of a centralised system such as The Arbiter does directly contradict Aidos Kuneen's ultimate 
-vision of a completely decentralised cryptocurrency. The Arbiter, for the reasons outlined previously, is accepted to be a
+This federated byzantine agreement needs over 80\% of agreement of trusted nodes not to stop confirmation, and needs over 20\% of agreement not to legitimate fraudulent transactions.
+While it is acknowledged that the  byzantine agreement suffers from these restrictions which does directly contradict Aidos Kuneen's ultimate 
+vision of a completely decentralised cryptocurrency, The Arbiter, for the reasons outlined previously, is accepted to be a
 `necessary evil' until such time as the network has matured to the point where it is capable of resisting attack on its own. 
-Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less product to its user base, the presence of The Arbiter allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' mechanisms for early network protection.
+Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less product to its user base,
+the presence of The Arbiter allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' mechanisms for early network protection.
 
 \section{Proof of Work}
 \label{sec:PoW}
@@ -929,6 +945,10 @@ Usage &  Finance, Banking, Digital Commerce, IoT Micropayments \\
 	\bibitem{pqcrypto}
 		PQCRYPTO,
 			\emph{Post-Quantum Cryptography for Long-Term Security}, 2015.	
+	
+	\bibitem{ripple}
+	David Schwartz, Noah Youngs, Arthur Britto
+			\emph{The Ripple Protocol Consensus Algorithm}, 2014.	
 	
 
 	\end{thebibliography}
