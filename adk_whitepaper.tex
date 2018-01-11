@@ -122,7 +122,7 @@ However, in recent years a number of problems have been identified with the Bitc
 	Senders are required to pay a transaction fee in order to incentivise the miners to include their transaction in a block.
 	If Bitcoin usage continues to grow and the price of Bitcoin increases, the relative value of the fee will also increase.
 	It no longer makes sense to send small transactions via the Bitcoin network
-	as the fee could easily exceed the value of the bitcoin being transacted. This forces senders to use complicated schemes to send small value transactions (e.g. 
+	as the fee could easily exceed the value of the Bitcoin being transacted. This forces senders to use complicated schemes to send small value transactions (e.g. 
 	micropayment channels).
 	\item{Weak Cryptographic Strength Against Quantum Computers}\\ 
 	As of 2017, the development of quantum computers is still in its infancy. However, experiments have already been carried out in 
@@ -236,11 +236,11 @@ key.
 
  Figure~\ref{fig:wots_pub} demonstrates how a public key is generated.
 
- In order to generate a public key, one initially generates 67 character strings consisting of 32 byte (256 bit) random binary data as a 
+ In order to generate a public key, one initially generates a series of 67 character strings consisting of 32 byte (256 bit) random binary data which becomes the 
  private key \( Priv_{j}, j=1 \ldots 67\). Then, each \( Priv_{j} \) is hashed with the SHA-256 algorithm for a total of 15 passes. 
  While hashing, each \( Priv_{j} \) is XORed with a value from a PRF (Pseudo Random Function). This XOR operation is employed to reduce 
- the signature size while maintaining the same security level. The output of these operations is a public 
- key \( Pub_{j}, j=1 \ldots 67\) with  67 character strings consisting  of 32 byte binary.
+ the signature size while maintaining the same security level. The output of these operations becomes the public 
+ key \( Pub_{j}, j=1 \ldots 67\) which is also a 67 character string consisting of 32 byte binary data.
 
  \begin{figure}[ht]
 	\begin{center}
@@ -255,7 +255,7 @@ key.
  When signing, one calculates a 256 bit hash \( H(msg) \) of the original message, and a corresponding 12 bit checksum from \( H(msg) \).
  Next, a series of 4 bit, 67 character binary strings \(N_i,i=1 \ldots 67\)  are produced from the \(H(msg)\) and the checksum. 
  Each of the \( Priv_j \) values are then hashed for \(N_i\) times and XORed with the same 
- values as used for \( Pub_{j} \). This results the signature \( Sig_j, j=1 \ldots 67 \). The checksum is used to prevent 
+ values as used for \( Pub_{j} \), to produce the signature \( Sig_j, j=1 \ldots 67 \). The checksum is used to prevent 
  attacks from malicious messages. For example, if there were no checksum and an attacker were to create a message whose hash were 000 
  \ldots 0, i.e. \( N_i = 0, i=1 \ldots 64 \), then the signature would be equal to the private key and thus the private key would be 
  exposed.
@@ -293,12 +293,12 @@ corresponding WOTS+ public keys \( Pub_{ij}, i = 1 \ldots 2^h , j=1 \ldots 67 \)
 Then, \(2^h\) number of `ltrees' are generated. \(i\)th (\(i = 1 \ldots 2^h\)) ltree is generated from
 \( Pub_{ij}, j = 1 \ldots 67 \). One receives the root hash of the \(i\)th
 ltree by hashing WOTS+ public keys (i.e. \( H(Pub_{i1} |  Pub_{i2} | \ldots  |  Pub_{i67} ) \)). The root hash of \(i\)th ltree
-becomes the \(i\)th leaf in the Merkle Tree. This operation is then repeated \( 2^h \) times to fill all leaves of the Merkle Tree.
+becomes the \(i\)th leaf in the Merkle Tree. This operation is then repeated \( 2^h \) times to fill all remaining leaves of the Merkle Tree.
 Finally, the 
 root hash of the Merkle Tree is calculated by hashing together the leaves of the Merkle Tree (i.e.\ roots of the ltrees). This root 
 hash becomes the XMSS public key..
 
-When signing, one simply selects one of the unused private keys and its corresponding public key. Then one calculates the WOTS+ signature. The 
+When signing, one simply selects one of the unused private keys and its corresponding public key. Next, one calculates the WOTS+ signature. The 
 XMSS signature is the WOTS+ signature with an `auth path'. The auth path is an additional piece of binary data used to calculate the 
 root hash of the Merkle Tree (i.e.\ the XMSS public key).
 
@@ -332,7 +332,7 @@ Note that:
 Additionally, note that we are able to reuse the same public key a number of times if \(h\) (the height of the Merkle Tree) is increased (although this requires more time to generate the public keys during the initial stage).
 
 \begin{table}[ht]
-	\caption{Merkle Tree height, estimated time for key generation per a CPU core, and intended users of XMSS}
+	\caption{Merkle Tree height, estimated time for key generation per CPU core, and intended users of XMSS}
     \label{tbl:height}
 	\begin{tabular}{rrrl} 
 		\toprule
@@ -478,9 +478,8 @@ Bitcoin network. The mandatory performance of PoW prior to sending a transaction
 attacks via spam transactions and double spend attacks (as previously discussed). In addition, PoW is used to distribute the 
 computational workload of validating transactions between all participants in the network. This ensures that the network does not 
 become constrained by the limitations in processing capabilities of a handful of `masternodes', but instead remains completely free to 
-scale as required. During the PoW operation each transaction is assigned \(L\) of  32-bit integer fields known as a `nonce'. 
-The value of this nonce is set such that the hash of the block will contain a leading run of zeros and form   `Cuckoo Graphs' with cycle length \(L\) in the `Cuckoo Cycle'
-explained later. The leading run of zeroes determines the time required for the PoW operation and has been chosen to produce an 
+scale as required. During the PoW operation each transaction is assigned a length \(L\), of 32-bit integer fields known as a `nonce'. 
+The value of this nonce is set such that the hash of the block will contain a leading run of zeros and form a series of `Cuckoo Graphs' with cycle length \(L\) (as is discussed in more detail below). The leading run of zeroes determines the time required for the PoW operation and has been chosen to produce an 
 average PoW time of 5--10 minutes.
 
 For PoW operations, Aidos Kuneen implements the Cuckoo Cycle as discussed in~\cite{cuckoo}. The Cuckoo Cycle arises by the insertion of
@@ -514,10 +513,9 @@ The Cuckoo Cycle has been chosen as the PoW function for iMesh, due to the follo
 
 \begin{itemize}
 	\item We anticipate significantly higher daily transaction volumes compared to that of Bitcoin, this is due to the fact that unlike Bitcoin, the fee-less nature of Aidos Kuneen means the economic disincentive against frequently sending small transactions is removed. Thus we need a faster verification. \\
-Unlike other typical PoW algorithms such as Cryptonight or Scrypt which are typically quite resource intensive, full-node can verify the validity of nonces much faster than them by Cuckoo Cycle. 
+Unlike other typical PoW algorithms such as Cryptonight or Scrypt which are typically quite resource intensive, full-nodes are able to verify the validity of nonces much faster when utilising the Cuckoo Cycle. 
 
-\item Unlike Bitcoin, in which  only PoWs in blocks are required to be verified, in Aidos Kuneen PoWs in all transactions must be verified. Apparently there are much more transactions than blocks, therefore 
-Aidos Kuneen requires more power for verification of PoW. Thus a faster verification of Cuckoo Cycle meets the requirement.
+\item Unlike Bitcoin, in which PoW is performed only on the blocks themselves, in Aidos Kuneen PoW must be performed for each individual transaction. As there are significantly more individual transactions than there are blocks, Aidos Kuneen therefore requires more power to perform PoW verification. Thus, it is essential that a highly efficient means of verification, such as the Cuckoo Cycle is employed.
 
 \item In order to prevent an attacker from being able to propagate fraudulent transactions throughout the network, specialist hardware such as ASICs and FPGAs should not provide any advantage. As the PoW time is mainly dominated by memory access speed, specialist processing hardware is essentially rendered ineffective.
 \end{itemize}
@@ -552,7 +550,7 @@ coPoW functions as follows:
 	\item The sender sends his transaction to the leader who then mixes it with the transactions from all the other participants to 
 	form a Batch.
 	\item All senders commence PoW on the Batch.
-	\item The sender periodically sends the result of their `PoW for proof' which meets `target for proof' to the leader.
+	\item The sender periodically sends the result of their `PoW for proof' (which meets the requirement for the `target for proof') to the leader.
 	\item The sender periodically receives the PoW results from other parties via the leader. 
 	\item If any of the parties submit incorrect results they are ejected from the group.
 	\item If any of the parties fail to submit their results within a set period of time, the leader ejects that party and then 
@@ -561,7 +559,7 @@ coPoW functions as follows:
 	the group is disbanded.
 \end{enumerate}
 
-Parties participating in a coPoW group must periodically send some of their results for PoW to the leader to prove 
+Parties participating in a coPoW group must periodically send some of their PoW results to the leader to prove 
 that they are actively participating in the group. This prevents free-loading by parties who join the group but do not intend to 
 actively contribute. The \emph{target for proof} threshold is set such that the hash is less complex than the \emph{final hash},
 this is important to ensure that devices with limited computational capacity are able to successfully meet the 
@@ -606,7 +604,7 @@ In order to prove ownership the user completes the ZKNI proof by proving they kn
 addresses listed as an input equals \( f_{k_{my}}(x_{my}) \). 
 The transaction also includes the user's public input \( x_{my} \) in order to prevent to the reuse of the shuffle address. It is also 
 important to point out that the user is required to withdraw the full amount that they originally deposited, 
-the system will not allow partial withdrawals of the user's balance because withdraw is forbidden for more than twice with same shuffle address.
+the system will not allow partial withdrawals of the user's balance as reuse of a shuffle address is strictly forbidden in order to maintain anonymity.
 
 Note: Transactions used for AKShuffle and transactions user for normal payments are completely different. AKShuffle (ZKBoo) is used 
 only for shuffling one's tokens. As such, one cannot use AKShuffle to send tokens directly to another user. This is due to the fact 
@@ -628,7 +626,7 @@ Clients can either connect directly to these full-nodes or to their own full-nod
 by the wallet application). Between full-nodes, transactions are sent and received using an efficient serialization (e.g.\ msgpack\footnote{https://msgpack.org/}) in order to reduce packet sizes.
 
 In order to ensure anonymity between public full-nodes and clients we utilise the Tor network. This is essential as full-nodes
-may otherwise receive sensitive information such as their clients' IP addresses with the clients' transactions.  
+may otherwise receive sensitive information such as their clients' IP addresses along with the clients' transactions.  
 
 It is important to note that Tor is not employed for communications between full-nodes. This is due to the fact that routing traffic via the Tor network introduces an unavoidable element of delay into inter-nodal communications, and efficiency between full-nodes 
 is a critical aspect of the speed of the entire Aidos Kuneen network. Additionally, there is little need to enforce anonymous communication between nodes, this is due to the fact that even if the initial client-to-node connection were not secured with Tor, the initial receiving node 
@@ -692,7 +690,7 @@ reference the attacker's new leaves, thus integrating them into the DAG and prev
 In a similar situation to scenario one, an attacker may seek to spam the network by broadcasting a large number of very low (or even zero value) transactions to either himself or an accomplice in an attempt create a large number of leaves in a short 
 amount of time, thus causing confirmation times to significantly increase. This is easily prevented by the existing requirement to complete PoW for every transaction, regardless of the value being transacted.
 
-In the third scenario, one transaction \(T_1\) could enter into iMesh while another, \(T_2\), is still in the process of being validated (i.e.\ still undergoing PoW) and has not been yet seen in iMesh.
+In the third scenario, one transaction \(T_1\) could enter into iMesh while another, \(T_2\), is still in the process of being validated (i.e.\ still undergoing PoW) and has not yet appeared in iMesh.
 Thus \(T_1\) and \(T_2\) may actually both be referring to the same reference transaction.
 This scenario is not necessarily the result of malicious intent, infact, it could be expected to occur quite frequently during normal network operation.
 
@@ -782,7 +780,7 @@ We take \(1 / \lambda_{pow} = 10 \) minutes and simulate with \(N_{ref}\ = 2, 4,
 	transactions enter into iMesh at same speed as Bitcoin.
 	The time to converge DAG is below 3000 seconds (50 minutes) for all values of \( N_{ref} \) except \( N_{ref}=2\) when \( \lambda_{in}=10\) TPS\@.
 	
-	It should be also  mentioned that as \(|Tx|\) exhibits simple linear behaviour and doubles with each increase in the value of \( N_{ref} \), from a purely transaction size focused point of view, we should seek 
+	It should also be mentioned that as \(|Tx|\) exhibits simple linear behaviour and doubles with each increase in the value of \( N_{ref} \), from a purely transaction size focused point of view, we should seek 
 	to minimise the \( N_{ref} \) value.
 	
 	We also simulate how the number of transactions \( N_{descendant} \), which refer directly and indirectly to any one transaction grow 
@@ -817,8 +815,8 @@ When \( N_{ref}\)= 8 and after 4000 transactions (\( 4000 \times 0.2\) seconds \
 	\item  Distribute transactions between nodes to allow increased scalability\\
 	i.e.\ a single full-node does not hold all transactions 
 	 within the network but instead queries other nodes in the network as required
-	\item Implement a Kademlia based scheme for Tor-like anonymity, post-quantum secure and distributed peer discovery.
-	\item More sophisticated ZKNI algorithm to reduce the transaction size.
+	\item Implement a Kademlia based scheme for Tor-like anonymity, post-quantum security and distributed peer discovery.
+	\item IMplement a more sophisticated ZKNI algorithm in order to reduce the transaction sizes.
 	\end{enumerate}
 
 	  \section{Conclusion}
