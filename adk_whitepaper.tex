@@ -430,7 +430,7 @@ as is demonstrated in~\cite{spectre}.
  transactions increases, the waiting time required for a transaction to be verified as legitimate by the network will decrease (i.e.\ the 
  larger the network grows the faster it becomes). Conversely, when the network is small, the waiting times are very long, the 
  network hash power is also likely to be quite small and this is an opportunity that an attacker may attempt to exploit. 
-In order to prevent this potential attack vector, we introduce a mechanism known as the `Federated Byzantine Agreement ' (as discussed in Section~\ref{sec:fba}), 
+In order to prevent this potential attack vector, we introduce a mechanism known as the `AKConsensus' (as discussed in Section~\ref{sec:fbam}), 
 to confirm transactions between trusted full-nodes while iMesh is still in its infancy.
 
 In the voting scheme, senders have an incentive to refer to as many transactions as they can due to the confirmation speed of the 
@@ -442,48 +442,53 @@ It must also be noted that if there are many leaves within iMesh, the possibilit
 transaction would reduce. To combat this we need to carefully consider how many transactions should be referred to by any one single 
 transaction. We will explore this issue in greater detail within Section~\ref{sec:leaves}.
 
-\subsection{The Federated Byzantine Agreement Mechanism (FBAM)}
+\subsection{The AKConsensus}
 \label{sec:fbam}
 
 As mentioned in the previous section, we must assume that during iMesh's infancy period an attacker with access to sufficient resources 
 could realistically command the majority of the total network hash power. It is for this reason that we are therefore unable to fully 
-trust the SPECTRE consensus mechanism during the early stages of network growth. Thus we must introduce the `Fedarated Byzantine Agreement Mechanism (FBAM)', a temporary 
-system which utilises `The Ripple Protocol Consensus Algorithm' with a semi-trusted model as detailed in~\cite{ripple}, in order to validate transactions until 
-such time as the SPECTRE consensus mechanism can take over.
+trust the SPECTRE consensus mechanism during the early stages of network growth. Thus we must introduce the `AKConsensus',
+a temporary system which utilises Fedarated Byzantine Agreement (FBA) from `The Ripple Protocol Consensus Algorithm' 
+with a semi-trusted model as detailed in~\cite{ripple},
+ in order to validate transactions until  such time as the SPECTRE consensus mechanism can take over.
 
-Within the Ripple Protocol the Federated Byzantine Agreement method is used in order to confirm the validity of all transactions. A similar system referred to as the `FBAM' is implemented in Aidos Kuneen to serve the same purpose.
-With the FBAM in place, a group of trusted nodes periodically confirm the validity of randomly selected transactions from within iMesh. A transaction that has been randomly selected for verification is known as a `Statement'. 
-In order to determine if the Statement is true or false, the trusted nodes examine the Statement's `timestamp' in iMesh.
+Within the Ripple Protocol the FBA method is used in order to confirm the validity of all transactions.
+ A similar system referred to as the `AKConsensus' is implemented in Aidos Kuneen to serve a different purpose.
+With the AKConsensus in place, a group of trusted nodes periodically just agree a randomly selected transaction from within iMesh.
+The transaction that has been randomly selected and agreed as a milestone is known as a `Statement'. 
 
-The process of verifiying a Statement is as follows:
+The process of  a Statement agreement is as follows:
 
 \vspace{-0.5\baselineskip}
 \begin{enumerate}
 	\setlength\itemsep{0em}
 	\item Each full-node defines the addresses of trusted nodes within their trusted list.
-	\item One of the full-nodes selects a candidate transaction (which now becomes known as a Statement) for review and broadcasts it to the trusted nodes within their trusted list.
+	\item One of the full-nodes selects a candidate Statement for review and broadcasts it to the trusted nodes within their trusted list.
 	\item Each trusted node initialises \(T\) to 50\%.
 	\item Each trusted node reviews the legitimacy of the Statement based on its local history.
-	\item Each trusted node broadcasts their result to the full-nodes that reference them.
-	\item If a full-node does not receive a miniumum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period, the full-node will deem the Statement to be false and it will be discarded.
+	\item Each trusted node broadcasts `yes' votes to the full-nodes that reference them if the Statement is legitimated.
+	If not, it will be discarded and trusted nodes doesn't respond anything.
+	\item If a full-node does not receive a minimum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period,
+	it will be discarded.
 	\item Each trusted node increases \(T=T+10\%\).
 	\item Step 5. is repeated
-	\item The final round of agreement requires a minimum of \(T=80\%\) of a full-node's trusted nodes in agreement in order to accept the Statement as true.
+	\item The final round requires a minimum of \(T=80\%\) of a full-node's trusted nodes in agreement in order to accept the Statement as be `agreed'.
 \end{enumerate}
 
-Once a Statement has been accepted by the network as being true, it becomes a reference point (ie: milestone) for the validity of other transactions.
+Once a Statement has been agreed by the network, it becomes a reference point (i.e.\ milestone) for the validity of other transactions.
 
-Note: In order to be accepted, Statements must have a valid transaction structure and must exist within iMesh. Conflicting transactions are also elegible for elevation and consideration as Statements, this is because the validation of a Statement 
-considers the `timestamp' of the transaction, not the transaction history.
+Note: In order to be agreed, Statements must have a valid transaction structure and must exist within iMesh.
+Conflicting transactions are also eligible for elevation and consideration as Statements, this is because the validation of a Statement 
+considers the `milestone' of the iMesh.
 
-Figure~\ref{fig:fba} illustrates how Statements act as milesontes for other transactions.
-Statements which the FBAM deems to be legitimate are subsequently regarded as `True Statements' by the full-nodes 
-and any conflicting transactions are discarded locally by each full node. Transactions that are referred to by a True Statement become known as 
+Figure~\ref{fig:fba} illustrates how Statements act as milestones for other transactions.
+Statements which the AKConsensus deems to be legitimate are subsequently regarded as `Agreed Statements' by the full-nodes 
+and any conflicting transactions are discarded locally by each full node. Transactions that are referred to by a Statement become known as 
 Finalised Transactions.
-The numbered transactions in Figure~\ref{fig:fba} show how transactions are finalised by the True Statements that reference them, e.g. the transactions designated with #2 are finalised
-by Statement #2.
+The numbered transactions in Figure~\ref{fig:fba} show how transactions are finalised by the Statements that reference them,
+e.g. the transactions designated with \#2 are finalised by Statement \#2.
 
-The rules employed by the FBAM in order to determine the validity of conflicting transactions are as follows.
+The rules employed by the AKConsensus in order to determine the validity of conflicting transactions are as follows.
 
  \begin{figure}[ht]
 	\begin{center}
@@ -501,13 +506,13 @@ The rules employed by the FBAM in order to determine the validity of conflicting
 \end{itemize}
 
 
-The Federated Byzantine Agreement Mechanism requires a minimum of 80\% agreement between trusted nodes in order to accept a Statement as true, and by extension, 
-20\% or more in order to reject a false Statement.
-While it is acknowledged that introduction of The FBAM does directly contradict Aidos Kuneen's ultimate 
-vision of a completely decentralised cryptocurrency, the FBAM, for the reasons outlined previously, is accepted to be a
+The AKConsensus requires a minimum of 80\% agreement between trusted nodes in order to agree a Statement, and by extension, 
+20\% or more in order to reject a invalid Statement.
+While it is acknowledged that introduction of The AKConsensus does directly contradict Aidos Kuneen's ultimate 
+vision of a completely decentralised cryptocurrency, the AKConsensus, for the reasons outlined previously, is accepted to be a
 `necessary evil' until such time as the network has matured to the point where it is capable of resisting attack on its own. 
 Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less product to its user base,
-the presence of the FBAM allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' 
+the presence of the AKConsensus allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' 
 mechanisms for early network protection.
 
 \section{Proof of Work}
