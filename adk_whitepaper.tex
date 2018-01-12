@@ -442,75 +442,72 @@ It must also be noted that if there are many leaves within iMesh, the possibilit
 transaction would reduce. To combat this we need to carefully consider how many transactions should be referred to by any one single 
 transaction. We will explore this issue in greater detail within Section~\ref{sec:leaves}.
 
-\subsection{The Federated Byzantine Agreement (FBA)}
-\label{sec:fba}
+\subsection{The Federated Byzantine Agreement Mechanism (FBAM)}
+\label{sec:fbam}
 
 As mentioned in the previous section, we must assume that during iMesh's infancy period an attacker with access to sufficient resources 
 could realistically command the majority of the total network hash power. It is for this reason that we are therefore unable to fully 
-trust the SPECTRE consensus mechanism during the early stages of network growth. Thus we must introduce the `Fedarated Byzantine Agreement (FBA)' a temporary 
-system which utilises `The Ripple Protocol Consensus Algorithm' with semi-trusted model as detailed in~\cite{ripple}, in order to validate transactions until 
+trust the SPECTRE consensus mechanism during the early stages of network growth. Thus we must introduce the `Fedarated Byzantine Agreement Mechanism (FBAM)', a temporary 
+system which utilises `The Ripple Protocol Consensus Algorithm' with a semi-trusted model as detailed in~\cite{ripple}, in order to validate transactions until 
 such time as the SPECTRE consensus mechanism can take over.
 
-While in Ripple Protocol the FBA is used in order to agree with validation of all transactions,
-with the FBA for Aidos Kuneen in place, a group of trusted nodes periodically agree a randomly selected transaction from within iMesh, known as a `Statement' in order to determine 
-the `timestamp' in iMesh.
+Within the Ripple Protocol the Federated Byzantine Agreement method is used in order to confirm the validity of all transactions. A similar system referred to as the `FBAM' is implemented in Aidos Kuneen to serve the same purpose.
+With the FBAM in place, a group of trusted nodes periodically confirm the validity of randomly selected transactions from within iMesh. A transaction that has been randomly selected for verification is known as a `Statement'. 
+In order to determine if the Statement is true or false, the trusted nodes examine the Statement's `timestamp' in iMesh.
 
-The process of agreement a Statement is as follows:
+The process of verifiying a Statement is as follows:
 
 \vspace{-0.5\baselineskip}
 \begin{enumerate}
 	\setlength\itemsep{0em}
 	\item Each full-node defines the addresses of trusted nodes within their trusted list.
-	\item One of the full-nodes selects a candidate Statement (i.e.\ a transaction) for agreement and broadcasts it to the trusted nodes within the trusted list.
-	\item Each trusted nodes initialize \(T\) to 50\%.
-	%\item Each trusted nodes then elevates the candidate statement to their trusted nodes within their trusted list.
-	\item Each trusted nodes reviews the legitimacy of the candidate statement.
-	\item Each trusted nodes broadcasts their own results to all full-nodes.
-	%\item Each of the trusted nodes applies the same ruleset to to its own transaction history in order to determine the legitimacy of the statement.
-	%\item Once \(T\) \% of  trusted nodes have arrived at a decision on the legitimacy of the statement, the verdict of a particular trusted node is relayed
-	%to all the full-nodes.
-	% \item Each full node then amalgamates the verdicts of all trusted nodes on its trusted list, and casts its vote based on the majority consensus of its trusted list.
-	\item If a full-node doesn't receives more than \(T\%\) of `yes' votes for the candidate statement in a certain period, the candidate statement will be discarded.
-	\item Each trusted nodes increase \(T=T+10\%\).
-	\item Go to 5.
-	\item The final round of agreement requires a minimum percentage of \(T=80\%\) of a server's trusted nodes in agreement in order to accept the Statement.
+	\item One of the full-nodes selects a candidate transaction (which now becomes known as a Statement) for review and broadcasts it to the trusted nodes within their trusted list.
+	\item Each trusted node initialises \(T\) to 50\%.
+	\item Each trusted node reviews the legitimacy of the Statement based on its local history.
+	\item Each trusted node broadcasts their result to the full-nodes that reference them.
+	\item If a full-node does not receive a miniumum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period, the full-node will deem the Statement to be false and it will be discarded.
+	\item Each trusted node increases \(T=T+10\%\).
+	\item Step 5. is repeated
+	\item The final round of agreement requires a minimum of \(T=80\%\) of a full-node's trusted nodes in agreement in order to accept the Statement as true.
 \end{enumerate}
 
-Note:
-Statements  must have a valid transaction structure and must be within iMesh, but may be one of  conflicting transactions. This is because the statement is
-only for  a `timestamp'  in iMesh.
+Once a Statement has been accepted by the network as being true, it becomes a reference point (ie: milestone) for the validity of other transactions.
 
-Figure~\ref{fig:fba} shows a example of validation of transactions.
-Transactions which the FBA deems to be legitimate are subsequently regarded as `finalized transactions' by the full-nodes 
-and any conflicting transaction are discarded locally by each full nodes.
-The txs including number in Figure~\ref{fig:fba} shows that the txs are finalized, e.g. the txs with number 1 is finalized
-by the statement with serial number 1.
-The rules employed by The FBA in order to determine the validity of conflicting transactions are as follows.
+Note: In order to be accepted, Statements must have a valid transaction structure and must exist within iMesh. Conflicting transactions are also elegible for elevation and consideration as Statements, this is because the validation of a Statement 
+considers the `timestamp' of the transaction, not the transaction history.
+
+Figure~\ref{fig:fba} illustrates how Statements act as milesontes for other transactions.
+Statements which the FBAM deems to be legitimate are subsequently regarded as `True Statements' by the full-nodes 
+and any conflicting transactions are discarded locally by each full node. Transactions that are referred to by a True Statement become known as 
+Finalised Transactions.
+The numbered transactions in Figure~\ref{fig:fba} show how transactions are finalised by the True Statements that reference them, e.g. the transactions designated with #2 are finalised
+by Statement #2.
+
+The rules employed by the FBAM in order to determine the validity of conflicting transactions are as follows.
 
  \begin{figure}[ht]
 	\begin{center}
 	\includegraphics[width=80mm]{fba.png}
-	  \caption{Statements and Validation of transactions}
+	  \caption{Statements and validation of transactions}
     \label{fig:fba}
 	\end{center}
  \end{figure}
 
 \begin{itemize}
-	\item The transaction which is finalized by youngest statement is deemed to be valid, and all others are considered to be invalid.
+	\item The transaction which is finalized by the youngest statement is deemed to be valid, and all others are considered to be invalid.
 	\item If conflicting transactions are finalized by the same statement, the transaction which possesses the older time stamp is deemed 
 	to be valid.
-	\item If both transactions posses the same time stamp, the transaction which has the smaller hash
-	is deemed to be valid.
+	\item If both transactions possess the same time stamp, the transaction which has the smaller hash is deemed to be valid.
 \end{itemize}
 
 
-This federated byzantine agreement method requires a minimum of 80\% agreement between trusted nodes in order to accept a Statement as legitimate, and by extension, 
-20\% or more in order to reject a fraudulent Statement.
-While it is acknowledged that introduction of The Semi Trusted Consensus Model does directly contradict Aidos Kuneen's ultimate 
-vision of a completely decentralised cryptocurrency, the BFT, for the reasons outlined previously, is accepted to be a
+The Federated Byzantine Agreement Mechanism requires a minimum of 80\% agreement between trusted nodes in order to accept a Statement as true, and by extension, 
+20\% or more in order to reject a false Statement.
+While it is acknowledged that introduction of The FBAM does directly contradict Aidos Kuneen's ultimate 
+vision of a completely decentralised cryptocurrency, the FBAM, for the reasons outlined previously, is accepted to be a
 `necessary evil' until such time as the network has matured to the point where it is capable of resisting attack on its own. 
 Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less product to its user base,
-the presence of the BFT agreement allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' 
+the presence of the FBAM allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' 
 mechanisms for early network protection.
 
 \section{Proof of Work}
