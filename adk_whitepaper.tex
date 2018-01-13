@@ -430,7 +430,7 @@ as is demonstrated in~\cite{spectre}.
  transactions increases, the waiting time required for a transaction to be verified as legitimate by the network will decrease (i.e.\ the 
  larger the network grows the faster it becomes). Conversely, when the network is small, the waiting times are very long, the 
  network hash power is also likely to be quite small and this is an opportunity that an attacker may attempt to exploit. 
-In order to prevent this potential attack vector, we introduce a mechanism known as the `AKConsensus' (as discussed in Section~\ref{sec:fbam}), 
+In order to prevent this potential attack vector, we introduce a mechanism known as the `AKConsensus' (as discussed in Section~\ref{sec:AKConsensus}), 
 to confirm transactions between trusted full-nodes while iMesh is still in its infancy.
 
 In the voting scheme, senders have an incentive to refer to as many transactions as they can due to the confirmation speed of the 
@@ -469,18 +469,18 @@ The process of consensus is as follows:
 	\item If a trusted node deems the Candidate Statement to be legitimate, it then broadcasts a `yes' vote to the full-nodes by which it is referenced. If the Candidate Statement is deemed to be fraudulent it is subsequently discarded.
 	\item If a full-node does not receive a minimum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period, the Candidate Statement is discarded.
 	\item Each trusted node increases \(T=T+10\%\).
-	\item Step 5. is repeated
+	\item Step 5.\ is repeated
 	\item The final round requires a minimum of \(T=80\%\) of a full-node's trusted nodes in agreement in order to accept the the Candidate Statement as being legitimate and elevate it to the status of Statement.
 \end{enumerate}
 
 Note: In order to be accepted as a Statement, a Candidate Statement must have a valid transaction structure and must exist within iMesh.
 
 Figure~\ref{fig:fba} illustrates how Statements act as milestones for other transactions.
-Full-nodes regard Statements as an "absolute truth" and any conflicting transactions are discarded locally by each full node. 
+Full-nodes regard Statements as an ``absolute truth'' and any conflicting transactions are discarded locally by each full node. 
 Subsequent transactions that are referred to by a Statement become known as Finalised Transactions.
 
 The numbered transactions in Figure~\ref{fig:fba} show how transactions are finalised by the Statements that reference them,
-e.g. the transactions designated with \#2 are finalised by Statement \#2.
+e.g.\ the transactions designated with \#2 are finalised by Statement \#2.
 
 The rules employed by AKConsensus in order to determine the validity of conflicting transactions are as follows.
 
@@ -504,7 +504,7 @@ AKConsensus requires a minimum of 80\% agreement between trusted nodes in order 
 
 While it is acknowledged that introduction of AKConsensus does directly contradict Aidos Kuneen's ultimate 
 vision of a completely decentralised cryptocurrency, AKConsensus, for the reasons outlined previously, is accepted to be a
-`necessary evil' until such time as the network has matured to the point where it is capable of resisting attack on its own. 
+``necessary evil'' until such time as the network has matured to the point where it is capable of resisting attack on its own. 
 Additionally, Aidos Kuneen believes very strongly in providing a completely fee-less product to its user base,
 the presence of AKConsensus allows the realisation of this vision from day one, with no need to resort to alternative, `incentivised' 
 mechanisms for early network protection.
