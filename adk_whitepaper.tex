@@ -443,7 +443,7 @@ transaction would reduce. To combat this we need to carefully consider how many 
 transaction. We will explore this issue in greater detail within Section~\ref{sec:leaves}.
 
 \subsection{AKConsensus}
-\label{sec:fbam}
+\label{sec:AKConsensus}
 
 As mentioned in the previous section, we must assume that during iMesh's infancy period an attacker with access to sufficient resources 
 could realistically command the majority of the total network hash power. It is for this reason that we are therefore unable to fully 
@@ -463,17 +463,17 @@ The process of consensus is as follows:
 \begin{enumerate}
 	\setlength\itemsep{0em}
 	\item Each full-node defines the addresses of trusted nodes within their trusted list.
-	\item One of the full-nodes selects a candidate transaction for review and broadcasts it to the trusted nodes within their trusted list.
+	\item One of the full-nodes selects a transaction for review and broadcasts it to the trusted nodes within their trusted list. 		This transaction is now referred to as a `Candidate Statement'.
 	\item Each trusted node initialises \(T\) to 50\%.
-	\item Each trusted node reviews the legitimacy of the transaction based on its local history.
-	\item If a trusted node deems a transaction to be legitimate, it then broadcasts a `yes' vote to the full-nodes by which it is referenced. If the transaction is deemed to be fraudulent it is subsequently discarded.
-	\item If a full-node does not receive a minimum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period, the transaction is discarded.
+	\item Each trusted node reviews the legitimacy of the Candidate Statement based on its local history.
+	\item If a trusted node deems the Candidate Statement to be legitimate, it then broadcasts a `yes' vote to the full-nodes by which it is referenced. If the Candidate Statement is deemed to be fraudulent it is subsequently discarded.
+	\item If a full-node does not receive a minimum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period, the Candidate Statement is discarded.
 	\item Each trusted node increases \(T=T+10\%\).
 	\item Step 5. is repeated
-	\item The final round requires a minimum of \(T=80\%\) of a full-node's trusted nodes in agreement in order to accept the the transaction as being legitimate and elevate it to the status of a Statement.
+	\item The final round requires a minimum of \(T=80\%\) of a full-node's trusted nodes in agreement in order to accept the the Candidate Statement as being legitimate and elevate it to the status of Statement.
 \end{enumerate}
 
-Note: In order to be accepted, Statements must have a valid transaction structure and must exist within iMesh.
+Note: In order to be accepted as a Statement, a Candidate Statement must have a valid transaction structure and must exist within iMesh.
 
 Figure~\ref{fig:fba} illustrates how Statements act as milestones for other transactions.
 Full-nodes regard Statements as an "absolute truth" and any conflicting transactions are discarded locally by each full node. 
@@ -499,8 +499,8 @@ The rules employed by AKConsensus in order to determine the validity of conflict
 	\item If both transactions possess the same time stamp, the transaction which has the smaller hash is deemed to be valid.
 \end{itemize}
 
-AKConsensus requires a minimum of 80\% agreement between trusted nodes in order to accept a Statement, and by extension, 
-20\% or more in order to reject an invalid Statement.
+AKConsensus requires a minimum of 80\% agreement between trusted nodes in order to accept a Candidate Statement, and by extension, 
+20\% or more in order to reject an invalid Candidate Statement.
 
 While it is acknowledged that introduction of AKConsensus does directly contradict Aidos Kuneen's ultimate 
 vision of a completely decentralised cryptocurrency, AKConsensus, for the reasons outlined previously, is accepted to be a
