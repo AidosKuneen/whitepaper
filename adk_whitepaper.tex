@@ -467,7 +467,7 @@ The process of consensus is as follows:
 	\item Each trusted node initialises \(T\) to 50\%.
 	\item Each trusted node reviews the legitimacy of the transaction based on its local history.
 	\item If a trusted node deems a transaction to be legitimate, it then broadcasts a `yes' vote to the full-nodes by which it is referenced. If the transaction is deemed to be fraudulent it is subsequently discarded.
-	\item If a full-node does not receive a minimum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period, the transacion is discarded.
+	\item If a full-node does not receive a minimum of \(T\%\) of `yes' votes from the nodes on its trusted list within a certain period, the transaction is discarded.
 	\item Each trusted node increases \(T=T+10\%\).
 	\item Step 5. is repeated
 	\item The final round requires a minimum of \(T=80\%\) of a full-node's trusted nodes in agreement in order to accept the the transaction as being legitimate and elevate it to the status of a Statement.
