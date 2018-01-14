@@ -95,6 +95,8 @@
 	\footnotesize
 	Copyright \( \copyright \)  2017--2018 by Aidos Developer and Aidos Foundation.
 	
+	\vspace{2mm}
+		
 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE HELD LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 	OUT OF, OR IN CONNECTION WITH THIS DOCUMENT, OR THE USE OF OR OTHER DEALINGS WITH
@@ -217,9 +219,9 @@
 	\noindent
 	{\bf IOTA\footnote{https://iota.org/}}
 	
-	IOTA is a DAG based, fee-less, IoT focussed cryptocurrency on which the Aidos Kuneen source code was initially based.
+	IOTA is a DAG based, fee-less, IoT focussed cryptocurrency.
 	
-	The IOTA team has decided to pursue a ternary based signature rather than binary. This is owing to the fact that ternary based 
+	IOTA is unique in that it makes use of ternary based signatures rather than standard binary. This is due to the fact that ternary based 
 	systems are theoretically more computationally efficient than binary based systems. In Aidos Kuneen we have chosen to utilise 
 	traditional binary based signatures in order to fully utilize existing CPU features (such as SIMD instructions and dedicated SHA 
 	extensions). This decision was made because we believe that current generation digital processors are already sufficiently fast and 
@@ -229,7 +231,7 @@
 	
 	\vspace{2.5mm}
 	
-	Regarding the choice of consensus algorithm, if we follow the confirmation process as outlined in IOTA's white paper, which counts only the number of referring transactions 
+	IOTA's confirmation process, as outlined in IOTA's white paper, counts only the number of referring transactions 
 	(descendant transactions), we notice that as the total number of leaves in the DAG increases (as will occur naturally), 
 	the percentage of these leaves to which descendant transactions refer will decrease.
 	This means that attackers could potentially grow their malicious
