@@ -1,17 +1,15 @@
 sudo: required
-
 before_install:
-- sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-fonts-recommended latexmk
-  texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended texlive-generic-recommended texlive-science 
-
+- sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-fonts-recommended
+  latexmk texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended
+  texlive-generic-recommended texlive-science
 script:
 - latexmk -interaction=nonstopmode -pdf -halt-on-error adk_whitepaper.tex
-
 deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: qEjK4nkO17d0CbIPz0BPmW0K2LkS+W4njLH+rg3NTsmY/4qTTPIunx2NfKq05Fi4c6SM7yLWRprg25g8JwdcCbWW5H8BbVjnoG7vTLsUqe7SNWB0N2yumTY6h6S7wV02fb+iLfBYhJorR6YmQwNewOaM2/wSHbgyutEfjQKd9OtzYjo12i92nuv9n1LH0v1z9ZDi41j2Iaqc5lr/dc8+gtpJndfVjd/43F0FrfweN2fuR1f3agSShteqT0854s/oO7xyw8bE2piuitoxO/oDTYglp+G+jH7pT1rsYxhGZW3CIan0AcIMJ+tvuRsSoIYDf3YlUl7tIL7jHtrCOwMahUKA/i/MoWSDWAhCZGanKcia8oZT4cI21MsENmtcJoCIGUhC7tNmvDl4jOpTjuR8CLIv4v7E/rCeTD8IpPpLjaYehWh81wLB94af+dFvGQ6USQ3qDolZn1NPpGVO/jqyB1PRouEHMPc17+PATER4T+h4Hy75b2BXqMoY3CZEp8O5rDCxnmVApI4Hrg1chUvVrcrNVpZq2DPYLUkfJp/1j83lczaubWvAaQQgjKQHDDqIkFp3J24DsdW5idR4EBaUCx9NMGMTiHGMhOIffsszt7MXdxQiybG6inZpIq59y6lua8el1KfkjVQAA0rVotYSAKSs8NUYHbuCMInk2GeOQN0=
+    secure: kSgfm39sW+sV1Tvm7psx7JyhXNAW+DPGj7Qmcy9VlhYIY/m0wK62HrFT7/j785WnhSOy7yhxvDy+bcewP8WpUp4LMht+/bUYK5HfM2EU7c7K8sfQmA7ME+ls/YOpUS7zKntEvQ2QcLdBP79i5O5aqXFkf8kATG/vMtMau66lpSecSuFa6e4mhBagGOk+8L5xLuz2GHZcakAA01MAvNW8V7Bxk8PFBuT3NNERTkS2QqY/JQl+LKg7nTEgvaf4vdtXf1DD8tUj43lDqYDgKE8PgCNnR3fYQ2hqtm+MNhKwmBmI8tIt8wBCmjn6CfA8txnlYiGB5nEwFSS44lqFPyyAN+074Ff1751wK6TkQa3n6uV77Fehec0YbMQ9EjIj6dnv2bbyaLBOLB8DwDDqElD4FW05uBGSHcbXQN0wlfk1NvTInFqmTjji0xNCkmMc3MRPYTccngLXzSqPviPBjl62AHaPStzfKTw8ItCqZPUOpXNKvkhfooMuRRNYOo8rWxGcdTLR5DXxFnvFhU9QTvmiTiv3G4qJRIYhhLgTEqHEjSnZqonZNfOHVEcfRFLKF9OnFr0H9VDBol0m4R10jO5LfG/YDzX+sTivzmXuApjEGx9enVpkqmXj+zbIXaPYIND0reWscMVYcjQ7ANeAg/ojlwhmf5Kd+YusNbB2Vbg4Vfk=
   file: adk_whitepaper.pdf
   on:
     tags: true
